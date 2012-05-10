@@ -1,0 +1,32 @@
+<?xml version="1.0"?> 
+<project name="All distributions" default="all" basedir="."> 
+
+	<target name="all">
+		<!-- Delete all old distributions -->
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="done"/>
+		</delete>
+
+		<!-- One per platform -->
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="win32-x86"/>
+		</ant>
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="win32-x86_64"/>
+		</ant>
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="gtk2-linux-x86"/>
+		</ant>
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="gtk2-linux-x86_64"/>
+		</ant>
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="cocoa-macosx"/>
+		</ant>
+		<ant antfile="build_okapi-olifant.xml">
+			<property name="platform" value="cocoa-macosx-x86_64"/>
+		</ant>
+
+	</target>
+
+</project>

@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<groupId>net.sf.okapi</groupId>
+	<artifactId>build-okapi-root</artifactId>
+	<packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<name>Okapi Build Root</name>
+	<url>http://code.google.com/p/okapi-olifant</url>
+
+	<!-- Don't use ${okapiOlifantVersion} to avoid warnings
+	but this version and ${okapiOlifantVersion} must be the same -->
+	<version>4.0.17-SNAPSHOT</version>
+	
+	<properties>
+		<!-- Version of the Olifant project -->
+		<okapiOlifantVersion>4.0.17-SNAPSHOT</okapiOlifantVersion>
+		<!-- Version of the Okapi main libraries to use with Olifant -->
+		<okapiLibVersion>0.17-SNAPSHOT</okapiLibVersion>
+		<!-- Encoding to use -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>cloudbees-okapi</id>
+			<name>okapi-repository-on-CloudBees</name>
+			<url>http://repository-okapi.forge.cloudbees.com/snapshot/</url>			
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>okapi</id>
+			<name>okapi-repository</name>
+			<url>http://maven2.okapi.googlecode.com/git/</url>			
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<modules>
+		<module>okapi</module>
+		<module>applications</module>		
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<version>2.3.7</version>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<manifestLocation>${basedir}/META-INF</manifestLocation>
+					<supportedProjectTypes>
+						<supportedProjectType>jar</supportedProjectType>
+						<supportedProjectType>bundle</supportedProjectType>
+						<supportedProjectType>war</supportedProjectType>
+					</supportedProjectTypes>					
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.1.2</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

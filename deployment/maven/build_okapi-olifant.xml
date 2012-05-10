@@ -1,0 +1,180 @@
+<?xml version="1.0"?> 
+<project name="okapi-apps" default="all" basedir="."> 
+
+	<!-- This script assumes build_okapi-lib.xml has been run alreday -->
+	
+	<!-- Guess the platform if this build file is not called with the platform already set -->
+	<condition property="platform" value="win32-x86">
+		<os family="windows"/>
+	</condition>
+	<condition property="swtLocalName" value="x86-3.7.jar">
+		<os family="windows"/>
+	</condition>
+
+	<condition property="platform" value="win32-x86_64">
+		<os family="windows" arch="x86_64"/>
+	</condition>
+	<condition property="swtLocalName" value="x86_64-3.7.jar">
+		<os family="windows" arch="x86_64"/>
+	</condition>
+
+	<condition property="platform" value="cocoa-macosx">
+		<os family="mac"/>
+	</condition>
+	<condition property="swtLocalName" value="macosx-3.7.jar">
+		<os family="mac"/>
+	</condition>
+
+	<condition property="platform" value="gtk2-linux-x86">
+		<os name="Linux" arch="x86"/>
+	</condition>
+	<condition property="swtLocalName" value="x86-3.7.jar">
+		<os name="Linux" arch="x86"/>
+	</condition>
+	
+	<condition property="platform" value="gtk2-linux-x86_64">
+		<os name="Linux" arch="x86_64"/>
+	</condition>
+	<condition property="swtLocalName" value="x86_64-3.7.jar">
+		<os name="Linux" arch="x86_64"/>
+	</condition>
+
+	<!-- Set the swtdep and swtdepName variables -->
+	<condition property="swtdep" value="win32/win32/x86/3.7">
+		<equals arg1="${platform}" arg2="win32-x86"/>
+	</condition>
+	<condition property="swtdepName" value="x86-3.7.jar">
+		<equals arg1="${platform}" arg2="win32-x86"/>
+	</condition>
+	
+	<condition property="swtdep" value="win32/win32/x86_64/3.7">
+		<equals arg1="${platform}" arg2="win32-x86_64"/>
+	</condition>
+	<condition property="swtdepName" value="x86_64-3.7.jar">
+		<equals arg1="${platform}" arg2="win32-x86_64"/>
+	</condition>
+	
+	<condition property="swtdep" value="cocoa/macosx/3.7">
+		<equals arg1="${platform}" arg2="cocoa-macosx"/>
+	</condition>
+	<condition property="swtdepName" value="macosx-3.7.jar">
+		<equals arg1="${platform}" arg2="cocoa-macosx"/>
+	</condition>
+	
+	<condition property="swtdep" value="cocoa/macosx-x86_64/3.7">
+		<equals arg1="${platform}" arg2="cocoa-macosx-x86_64"/>
+	</condition>
+	<condition property="swtdepName" value="macosx-x86_64-3.7.jar">
+		<equals arg1="${platform}" arg2="cocoa-macosx-x86_64"/>
+	</condition>
+	
+	<condition property="swtdep" value="gtk2/linux/x86/3.7">
+		<equals arg1="${platform}" arg2="gtk2-linux-x86"/>
+	</condition>
+	<condition property="swtdepName" value="x86-3.7.jar">
+		<equals arg1="${platform}" arg2="gtk2-linux-x86"/>
+	</condition>
+	
+	<condition property="swtdep" value="gtk2/linux/x86_64/3.7">
+		<equals arg1="${platform}" arg2="gtk2-linux-x86_64"/>
+	</condition>
+	<condition property="swtdepName" value="x86_64-3.7.jar">
+		<equals arg1="${platform}" arg2="gtk2-linux-x86_64"/>
+	</condition>
+
+	<!-- Set flags for what dstribution is being built -->
+	<condition property="building-windows">
+		<or>
+			<equals arg1="${platform}" arg2="win32-x86"/>
+			<equals arg1="${platform}" arg2="win32-x86_64"/>
+		</or>
+	</condition>
+	<condition property="building-linuxmac">
+		<or>
+			<equals arg1="${platform}" arg2="gtk2-linux-x86"/>
+			<equals arg1="${platform}" arg2="gtk2-linux-x86_64"/>
+			<equals arg1="${platform}" arg2="cocoa-macosx"/>
+			<equals arg1="${platform}" arg2="cocoa-macosx-x86_64"/>
+		</or>
+	</condition>
+
+	<!-- Get the version information to use from file -->
+	<property file="../shared/release.properties" />
+ 	
+ 	<property name="olifantName" value="okapi-olifant"/>
+	
+ 	<property name="tmp" value="tmp"/>
+	<property name="dist" value="dist_${platform}"/>
+	<property name="done" value="done"/>
+	<property name="distLib" value="${dist}/lib"/>
+	<property name="distLicenses" value="${distLib}/licenses"/>
+	<property name="distName" value="${olifantName}_${platform}_${olifantVersion}" />
+	<property name="mavenStore" value="${user.home}/.m2/repository"/>
+
+	<tstamp>
+	 <format property="TODAY" pattern="MMM-dd-yyyy"/>
+	</tstamp>
+	
+	<target name="init">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${dist}"/>
+		</delete>
+		<mkdir dir="${distLib}"/>
+		<mkdir dir="${distLicenses}"/>
+		<mkdir dir="${done}"/>
+ 	</target>
+
+	<!-- Olifant -->
+	<target name="olifant">
+		<!-- Copy all the jars to lib -->
+		<copy todir="${distLib}">
+			<fileset dir="../../applications/olifant/target/jarsLib"/>
+		</copy>
+		<!-- Remove original the SWT jar that is the one for the platform we are building on -->
+		<delete file="${distLib}/${swtLocalName}"/>
+		
+		<!-- Copy the target platform-specific SWT jar to the lib (and name it swt.jar)-->
+		<copy file="${mavenStore}/org/eclipse/swt/${swtdep}/${swtdepName}"
+			tofile="${distLib}/swt.jar" />
+		
+		<!-- Copy the olifant jar -->
+		<copy file="../../applications/olifant/target/okapi-application-olifant-${olifantVersion}.jar"
+			tofile="${distLib}/olifant.jar" />
+
+		<!-- Copy the target platform-specific files -->
+		<copy todir="${dist}" overwrite="true">
+			<fileset dir="data/okapi-apps/${platform}" includes="**/**"/>
+		</copy>
+
+		<!-- Update and copy changes log and readme -->
+		<copy todir="${dist}" file="../shared/changes.html"/>
+		<replace file="${dist}/changes.html" token="@date@" value="${TODAY}"/>
+		<copy todir="${dist}" file="data/okapi-apps/readme.html" overwrite="true"/>
+		<replace file="${dist}/readme.html" token="@version@" value="${olifantVersion}"/>
+		<replace file="${dist}/readme.html" token="@date@" value="${TODAY}"/>
+		
+		<!-- Copy the licenses -->
+		<copy todir="${distLicenses}" overwrite="true">
+			<fileset dir="../shared/licenses" includes="**/**"/>
+		</copy>
+		
+	</target>
+	
+	<target name="zipWin" unless="building-linuxmac">
+		<zip destfile="${done}/${distName}.zip" basedir="${dist}"/>
+	</target>
+
+	<target name="zipLinuxMac" if="building-linuxmac">
+		<zip destfile="${done}/${distName}.zip">
+			<zipfileset filemode="755" dir="${dist}">
+				<include name="**/*.sh"/>
+			</zipfileset>
+			<zipfileset dir="${dist}">
+				<exclude name="**/*.sh"/>
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="all" depends="init, olifant, zipWin, zipLinuxMac"/>
+
+</project>
