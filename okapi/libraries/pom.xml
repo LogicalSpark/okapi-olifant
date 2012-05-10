@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<parent>
+		<artifactId>build-okapi</artifactId>
+		<groupId>net.sf.okapi</groupId>
+		<!-- Cannot use a variable, but this should be ${okapiOlifantVersion} -->
+		<version>4.0.17-SNAPSHOT</version>
+	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>build-libraries</artifactId>
+    <groupId>net.sf.okapi.lib</groupId>
+    <packaging>pom</packaging>
+	<name>Okapi Libraries Build</name>
+	<modules>
+		<module>lib-tmdb</module>
+    </modules>
+
+</project>

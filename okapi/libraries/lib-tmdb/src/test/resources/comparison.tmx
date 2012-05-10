@@ -1,0 +1,655 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tmx version="1.4">
+<header creationtool="Olifant" creationtoolversion="3.0.8.0" datatype="unknown" segtype="paragraph" adminlang="en" srclang="EN-US" o-tmf="unknown" changedate="20110812T150051Z" changeid="YvesS">
+</header>
+<body>
+<tu tuid="autoID28">
+<tuv xml:lang="EN-US">
+<seg>Africa</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Àfrica</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">000</prop>
+<seg>L'Àfrica</seg>
+</tuv>
+</tu>
+<tu tuid="autoID21">
+<tuv xml:lang="EN-US">
+<seg>Itinerary Stop</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Parada de l'itinerari</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">020</prop>
+<seg>Itinerari Stop</seg>
+</tuv>
+</tu>
+<tu tuid="autoID37">
+<tuv xml:lang="EN-US">
+<seg>You will not be bored in our safari.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>al nostre safari, no us avorrireu.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">037</prop>
+<seg>Vostè no serà avorrit en el nostre safari.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID27">
+<tuv xml:lang="EN-US">
+<seg>Canyon X and the Land of the Navajo</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El Canyó X i la terra dels navahos</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">046</prop>
+<seg>Canyon x i la terra de la Navajo</seg>
+</tuv>
+</tu>
+<tu tuid="autoID32">
+<tuv xml:lang="EN-US">
+<seg>Our “<ph x="1">&lt;x0/&gt;</ph>Around the World in 80 Days<ph x="2">&lt;x1/&gt;</ph>” travel package is specifically designed for this.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El paquet de viatge “<ph x="1">&lt;x0/&gt;</ph>La volta al món en 80 dies<ph x="2">&lt;x1/&gt;</ph>” està dissenyat específicament per fer-ho possible.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">050</prop>
+<seg>El nostre"<ph x="1">&lt;x0/&gt;</ph>Al voltant del món en 80 dies<ph x="2">&lt;x1/&gt;</ph>"paquet de viatge està específicament dissenyat per a això.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID50">
+<tuv xml:lang="EN-US">
+<seg>The occasional roar of a lion, on the prowl near the outhouse at night.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>L'eventual rugit d'un lleó que ronda de nit prop de la comuna.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">051</prop>
+<seg>El rugit ocasional d'un Lleó, a l'aguait a prop de la dependència a la nit.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID30">
+<tuv xml:lang="EN-US">
+<seg>Ankor Wat - The Lost Temples of the Khmer</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Ankor Wat: Els temples perduts dels khmers</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">052</prop>
+<seg>Ankor Wat - els Temples perduts de la Khmer</seg>
+</tuv>
+</tu>
+<tu tuid="autoID51">
+<tuv xml:lang="EN-US">
+<seg>…and much more<ph x="1">&lt;x0/&gt;</ph>. We guarantee it:</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>…i molt més<ph x="1">&lt;x0/&gt;</ph>. Us ho garantim:</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">052</prop>
+<seg>... i molt més<ph x="1">&lt;x0/&gt;</ph>. Podem garantir-ho:</seg>
+</tuv>
+</tu>
+<tu tuid="autoID15">
+<tuv xml:lang="EN-US">
+<seg>The Lost Temples of the Khmer</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Els temples perduts dels khmers</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">054</prop>
+<seg>Els Temples perduts de la Khmer</seg>
+</tuv>
+</tu>
+<tu tuid="autoID17">
+<tuv xml:lang="EN-US">
+<seg>The cuddly black mamba snake hiding in your bedrolls.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>La serp mamba negra esmunyint-se dins del sac de dormir.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">054</prop>
+<seg>La serp de peluix mamba negre d'encobriment en el seu bedrolls.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID23">
+<tuv xml:lang="EN-US">
+<seg>Queensland - Emerald and Gold</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Queensland, maragdes i or</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">055</prop>
+<seg>Queensland - or i maragda</seg>
+</tuv>
+</tu>
+<tu tuid="autoID31">
+<tuv xml:lang="EN-US">
+<seg>Have you ever dreamed of stepping on each of the six continents around the planet during a single, amazing trip?</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Heu somiat mai trepitjar tots sis continents del planeta en un únic viatge extraordinari?</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">055</prop>
+<seg>Alguna vegada somniat trepitjar cada un dels sis continents al voltant del planeta durant un viatge únic i sorprenent?</seg>
+</tuv>
+</tu>
+<tu tuid="autoID48">
+<tuv xml:lang="EN-US">
+<seg>Canoe trip <bpt i="1">&lt;g0&gt;</bpt>during the night<ept i="1">&lt;/g0&gt;</ept>. Trekking to two oxbow lakes.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Sortida <bpt i="1">&lt;g0&gt;</bpt>nocturna<ept i="1">&lt;/g0&gt;</ept> en canoa. Trekking a dos llacs de braç mort.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">055</prop>
+<seg>Canoa viatge <bpt i="1">&lt;g0&gt;</bpt>durant la nit<ept i="1">&lt;/g0&gt;</ept>. Trekking a dos dels llacs de oxbow.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID20">
+<tuv xml:lang="EN-US">
+<seg>You will stay in our permanent camps of <ph x="1">&lt;x0/&gt;</ph>Selinda<ph x="2">&lt;x1/&gt;</ph> and experience there all the true thrills of a wildlife experience, which may<ph x="3">&lt;x2/&gt;</ph> include:</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Us allotjareu als nostres campaments permanents de <ph x="1">&lt;x0/&gt;</ph>Selinda<ph x="2">&lt;x1/&gt;</ph>, on viureu l'experiència emocionant i genuïna de la vida salvatge, que pot<ph x="3">&lt;x2/&gt;</ph> incloure:</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">057</prop>
+<seg>Vostè es quedarà en la nostra permanents camps de<ph x="1">&lt;x0/&gt;</ph>Selinda<ph x="2">&lt;x1/&gt;</ph>i l'experiència allà totes les emocions veritables d'una experiència de vida silvestre, que pot<ph x="3">&lt;x2/&gt;</ph>inclouen:</seg>
+</tuv>
+</tu>
+<tu tuid="autoID33">
+<tuv xml:lang="EN-US">
+<seg>The Okavango Delta is a lush garden, a place of green tall grass, of raucous flocks of birds and large herds of antelopes.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El delta de l'Okavango és un jardí exuberant, un lloc amb pastura alta i verda, bandades d'aus estridents i grans ramats d'antílops.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">058</prop>
+<seg>El Delta de l'Okavango és un frondós jardí, un lloc de verd herba alta, de la sorollosa bandades d'aus i grans ramats de captures a antílops dels.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID4">
+<tuv xml:lang="EN-US">
+<seg>Islands and channels grow, shrink and move at their rhythm.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Les illes i els canals creixen, s'encongeixen i es mouen al seu ritme.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">059</prop>
+<seg>Illes i canals de créixer, reduir i moure's a seu ritme.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID2">
+<tuv xml:lang="EN-US">
+<seg>Excursion deep into the forest from Puerto Maldonado.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Excursió a les profunditats de la selva de Puerto Maldonado.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">060</prop>
+<seg>Excursió profundament en el bosc de Puerto Maldonado.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID43">
+<tuv xml:lang="EN-US">
+<seg>Lemaire Channel</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Canal de Lemaire</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">060</prop>
+<seg>Canal Lemaire</seg>
+</tuv>
+</tu>
+<tu tuid="autoID47">
+<tuv xml:lang="EN-US">
+<seg>The landscape is perpetually changing.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El paisatge canvia constantment.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">060</prop>
+<seg>El paisatge perpètuament està canviant.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID29">
+<tuv xml:lang="EN-US">
+<seg>There, once a year, the heavy rains in the north send a powerful pulse of new blood through the arteries of the Delta.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Allà, un cop l'any, les pluges torrencials del nord envien un fort batec de sang nova per les artèries del delta.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">061</prop>
+<seg>Allà, una vegada un any, les fortes pluges al nord enviï un pols poderosa de la nova sang a través de les artèries del Delta.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID45">
+<tuv xml:lang="EN-US">
+<seg>The clever crocodile’s ambush on the bank of the river at dusk.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>L'enginyosa emboscada del cocodril a la vora del riu al capvespre.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">062</prop>
+<seg>L'emboscada el cocodril intel ligent a la riba del riu a l'horabaixa.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID7">
+<tuv xml:lang="EN-US">
+<seg>From the canyons of Arizona, to the Khmer temples deep in the jungle; from the tropical beaches of Queensland to the glaciers of Antarctica; or from the wild savanna of Africa to mysterious castles in the forests of Bohemia, our offer takes you in some of the most amazing places on our planet.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Dels canyons d'Arizona als temples khmers de la selva profunda, de les platges tropicals de Queensland a les glaceres de l'Antàrtida, o de la sabana salvatge de l'Àfrica als castells misteriosos dels boscos de Bohèmia: amb el nostre paquet visitareu els llocs més fascinants del planeta.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">064</prop>
+<seg>Des de the canyons d'Arizona, als Khmer temples profund a la Selva; de les platges tropicals de Queensland a les glaceres de l'Antàrtida; o des de la sabana salvatge d'Àfrica als castells misteriós en els boscos de Bohèmia, la nostra oferta et porta a alguns dels llocs més sorprenents en el nostre planeta.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID16">
+<tuv xml:lang="EN-US">
+<seg>In 80 days, you will see more of the world than most see through their entire lifetime!</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>En 80 dies, veureu més món que la majoria de gent veurà en tota la seva vida!</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">064</prop>
+<seg>En 80 dies, podreu veure més del món que molts veuen a través de la seva vida sencera!</seg>
+</tuv>
+</tu>
+<tu tuid="autoID8">
+<tuv xml:lang="EN-US">
+<seg>In southern Africa, deep in the Kalahari Desert, after its long journey from the Angola highlands, the Okavango River comes to a slow end in an immense delta lost at the middle of the thirsty sands of Botswana.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Al sud d'Àfrica, ben endins del desert de Kalahari, després del seu llarg viatge des de les terres altes d'Angola, el riu Okavango arriba a un final lent en un immens delta perdut enmig de les sorres sedegoses de Botswana.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">066</prop>
+<seg>A l'Àfrica del Sud, profund en el Desert de Kalahari, després de la seva llarg viatge des de l'altiplà d'Angola, el riu Okavango arriba a un fi lent en un immens delta va perdre en el medi de la sorra assedegat de Botswana.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID41">
+<tuv xml:lang="EN-US">
+<seg>Picture 2</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Imatge 2</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">066</prop>
+<seg>Foto 2</seg>
+</tuv>
+</tu>
+<tu tuid="autoID42">
+<tuv xml:lang="EN-US">
+<seg>The flood makes the delta swell three times its size of the dry season.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>La inundació fa que el delta sigui tres vegades més gran que a l'estació seca.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">066</prop>
+<seg>La inundació fa delta de l'onatge tres vegades la mida de l'estació seca.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID12">
+<tuv xml:lang="EN-US">
+<seg>We offer various choices of insurance packages, including for loss of limbs or vision, snake bites, infections (non-purulent only) as well as injuries due to animal trampling.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Us oferim diverses opcions de paquets d'assegurances, que cobreixen la pèrdua d'extremitats o de visió, les picades de serp, les infeccions (només no purulentes), així com les lesions produïdes per esclafament animal.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">067</prop>
+<seg>Li oferim diverses opcions de paquets d'assegurances, incloent-hi la pèrdua de les extremitats o visió, mossegades de serps, infeccions de (no purulent només), així com les lesions a causa de l'animal trepig.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID14">
+<tuv xml:lang="EN-US">
+<seg>Due to various reasons out of our control, we can only guarantee the mosquitoes and the flies.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Per motius aliens a la nostra voluntat, només podem garantir els mosquits i les mosques.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">068</prop>
+<seg>A causa de diverses raons fora del nostre control, només podem garantir els mosquits i les mosques.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID18">
+<tuv xml:lang="EN-US">
+<seg>The odd charge of a mad elephant among the tents (an excellent opportunity for great pictures).</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>L'insòlit atac d'un elefant foll per entre les tendes (excel·lent oportunitat per fer fotografies esplèndides).</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">069</prop>
+<seg>L'acusació estrany d'un elefant boig hi entre les carpes (una excel lent oportunitat per a imatges grans).</seg>
+</tuv>
+</tu>
+<tu tuid="autoID36">
+<tuv xml:lang="EN-US">
+<seg>Paris - The City of Lights</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>París, la ciutat de la llum</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">069</prop>
+<seg>París - la ciutat de les llums</seg>
+</tuv>
+</tu>
+<tu tuid="autoID9">
+<tuv xml:lang="EN-US">
+<seg>Visit of the various tamples of the Angkor Wat area.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Visita als diversos temples de l'àrea d'Angkor Wat.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">072</prop>
+<seg>Visita de la tamples diferents de l'àrea d'Angkor Wat.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID10">
+<tuv xml:lang="EN-US">
+<seg>Machu Picchu and the Inca Trail</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Machu Picchu i el camí inca</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">072</prop>
+<seg>Machu Picchu i la pista d'Inca</seg>
+</tuv>
+</tu>
+<tu tuid="autoID24">
+<tuv xml:lang="EN-US">
+<seg>It includes lodging in a permanent camp and one canoe excursion <bpt i="1">&lt;g0&gt;</bpt>every day<ept i="1">&lt;/g0&gt;</ept>. Type of wildlife:</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Inclou allotjament en un campament permanent i una excursió <bpt i="1">&lt;g0&gt;</bpt>diària<ept i="1">&lt;/g0&gt;</ept> en canoa. Tipus de fauna salvatge:</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">072</prop>
+<seg>Inclou allotjament en un campament permanent i una canoa excursió <bpt i="1">&lt;g0&gt;</bpt>cada dia<ept i="1">&lt;/g0&gt;</ept>. Tipus de vida silvestre:</seg>
+</tuv>
+</tu>
+<tu tuid="autoID52">
+<tuv xml:lang="EN-US">
+<seg>During your week-long safari, you will have the occasion to see many animals: elephants, lions, zebras, buffaloes, antelopes, gazelles, kudus, giraffes, hippopotamus, crocodiles and hundreds of other species.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Durant la setmana que dura el safari, tindreu l'ocasió de veure molts animals: elefants, lleons, zebres, búfals, antílops, gaseles, cudús, girafes, hipopòtams, cocodrils i centenars d'altres espècies.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">075</prop>
+<seg>Durant el seu safari de setmana llarg, vostè tindrà l'ocasió per veure molts animals: elefants, lleons, zebres, buffaloes, captures a antílops dels, gaseles, kudus, girafes, hipopòtams, cocodrils i centenars d'altres espècies.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID53">
+<tuv xml:lang="EN-US">
+<seg>Overnight stay is in a hotel at Siem Reap.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>L'allotjament és en un hotel a Siem Reap.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">075</prop>
+<seg>Estada de nit és en un hotel a Siem Reap.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID46">
+<tuv xml:lang="EN-US">
+<seg>Around the World in 80 Days</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>La volta al món en 80 dies</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">076</prop>
+<seg>Al voltant del món en 80 dies</seg>
+</tuv>
+</tu>
+<tu tuid="autoID38">
+<tuv xml:lang="EN-US">
+<seg>Lions, antelopes, elephants, zebras, giraffes, hippos, kudu, and much more.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Lleons, antílops, elefants, zebres, girafes, hipopòtams, cudús i molt més.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">078</prop>
+<seg>Lleons, captures a antílops dels, elefants, zebres, girafes, hipopòtams, kudu i molt més.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID44">
+<tuv xml:lang="EN-US">
+<seg>Puerto Maldonado - The Roar of Jaguar in the Night</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Puerto Maldonado: El rugit del jaguar a la nit</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">078</prop>
+<seg>Puerto Maldonado - el rugit del Jaguar a la nit</seg>
+</tuv>
+</tu>
+<tu tuid="autoID19">
+<tuv xml:lang="EN-US">
+<seg>OKAVANGO - The River that Never Reaches the Sea</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>OKAVANGO: El riu que mai no arriba al mar</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">084</prop>
+<seg>OKAVANGO - el riu que mai no arriba al mar</seg>
+</tuv>
+</tu>
+<tu tuid="autoID22">
+<tuv xml:lang="EN-US">
+<seg>Okavango - The River that Never Reaches the Sea</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Okavango: El riu que mai no arriba al mar</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">084</prop>
+<seg>Okavango - el riu que mai no arriba al mar</seg>
+</tuv>
+</tu>
+<tu tuid="autoID26">
+<tuv xml:lang="EN-US">
+<seg>The sweet music of the mosquitoes and the beautiful choreography of thousand of flies.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>La música dolça dels mosquits i la bella coreografia de milers de mosques.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">096</prop>
+<seg>La música dolça dels mosquits i la bonica coreografia de milers de mosques.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID1">
+<tuv xml:lang="EN-US">
+<seg>North-America</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Amèrica del Nord</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Amèrica del Nord</seg>
+</tuv>
+</tu>
+<tu tuid="autoID3">
+<tuv xml:lang="EN-US">
+<seg>Safari in the Okavango delta.</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Safari al delta de l'Okavango.</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Safari al delta de l'Okavango.</seg>
+</tuv>
+</tu>
+<tu tuid="autoID5">
+<tuv xml:lang="EN-US">
+<seg>Europe</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Europa</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Europa</seg>
+</tuv>
+</tu>
+<tu tuid="autoID6">
+<tuv xml:lang="EN-US">
+<seg>The Bridge on the Kwai River</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El pont sobre el riu Kwai</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>El pont sobre el riu Kwai</seg>
+</tuv>
+</tu>
+<tu tuid="autoID11">
+<tuv xml:lang="EN-US">
+<seg>Castles of Bohemia</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Castells de Bohèmia</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Castells de Bohèmia</seg>
+</tuv>
+</tu>
+<tu tuid="autoID13">
+<tuv xml:lang="EN-US">
+<seg>Asia</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Àsia</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Àsia</seg>
+</tuv>
+</tu>
+<tu tuid="autoID25">
+<tuv xml:lang="EN-US">
+<seg>Oceania/Australia</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Oceania/Austràlia</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Oceania/Austràlia</seg>
+</tuv>
+</tu>
+<tu tuid="autoID34">
+<tuv xml:lang="EN-US">
+<seg>The River that Never Reaches the Sea</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>El riu que mai no arriba al mar</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>El riu que mai no arriba al mar</seg>
+</tuv>
+</tu>
+<tu tuid="autoID35">
+<tuv xml:lang="EN-US">
+<seg>Code</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Codi</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Codi</seg>
+</tuv>
+</tu>
+<tu tuid="autoID39">
+<tuv xml:lang="EN-US">
+<seg>Itinerary Selection</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Selecció de l'itinerari</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Selecció de l'itinerari</seg>
+</tuv>
+</tu>
+<tu tuid="autoID40">
+<tuv xml:lang="EN-US">
+<seg>Picture 3</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Imatge 3</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Imatge 3</seg>
+</tuv>
+</tu>
+<tu tuid="autoID49">
+<tuv xml:lang="EN-US">
+<seg>Antarctica</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>L'Antàrtida</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>L'Antàrtida</seg>
+</tuv>
+</tu>
+<tu tuid="autoID54">
+<tuv xml:lang="EN-US">
+<seg>South-America</seg>
+</tuv>
+<tuv xml:lang="CA">
+<seg>Amèrica del Sud</seg>
+</tuv>
+<tuv xml:lang="CA-MSMT">
+<prop type="Score">100</prop>
+<seg>Amèrica del Sud</seg>
+</tuv>
+</tu>
+</body>
+</tmx>
