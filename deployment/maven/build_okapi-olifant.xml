@@ -128,7 +128,7 @@
 	<target name="olifant">
 		<!-- Copy all the jars to lib -->
 		<copy todir="${distLib}">
-			<fileset dir="../../applications/olifant/target/jarsLib"/>
+			<fileset dir="../../applications/olifant/target/jarslib"/>
 		</copy>
 		<!-- Remove original the SWT jar that is the one for the platform we are building on -->
 		<delete file="${distLib}/${swtLocalName}"/>
