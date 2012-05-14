@@ -98,6 +98,8 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 	private MainForm mainForm;
 	private int srcCol; // Column in the table that holds the source text, use -1 for none, 0-based, 1=SegKey+Flag
 	private int trgCol; // Column in the table that holds the target text, use -1 for none, 0-based, 1=SegKey+Flag
+	private String srcCodesFn;
+	private String trgCodesFn;
 	private TMOptions opt;
 	private SearchAndReplaceForm sarForm;
 	private SearchAndReplaceOptions sarOptions;
@@ -125,7 +127,9 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 		
 		cursorLoc = new Point(0, 0);
 		srcCol = -1;
+		srcCodesFn = null;
 		trgCol = -1;
+		trgCodesFn = null;
 		
 		sarOptions = new SearchAndReplaceOptions();
 		fltOptions = new FilterOptions();
@@ -535,9 +539,17 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 		if (( oldSrc != newSrc ) || ( oldTrg != newTrg )) {
 			saveEntry();
 		}
-		// Set the new columns and update the content
+		
+		// Set the new columns index and field names
 		srcCol = newSrc;
 		trgCol = newTrg;
+		if ( srcCol != -1 ) {
+			srcCodesFn = DbUtil.CODES_PREFIX+opt.getSourceLocale();
+		}
+		if ( trgCol != -1 ) {
+			trgCodesFn = DbUtil.CODES_PREFIX+opt.getTargetLocale();
+		}
+		// Update the content
 		updateCurrentEntry();
 	}
 	
@@ -726,8 +738,10 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 			else {
 				TableItem ti = table.getItem(n);
 				editPanel.setFields(
-					srcCol==-1 ? null : ti.getText(srcCol), null, srcCol,
-					trgCol==-1 ? null : ti.getText(trgCol), null, trgCol);
+					srcCol==-1 ? null : ti.getText(srcCol), (String)ti.getData(Integer.toString(srcCol)), srcCol,
+					trgCol==-1 ? null : ti.getText(trgCol), (String)ti.getData(Integer.toString(trgCol)), trgCol);
+//				srcCol==-1 ? null : ti.getText(srcCol), null, srcCol,
+//				trgCol==-1 ? null : ti.getText(trgCol), null, trgCol);
 			}
 			previousRow = currentRow;
 			currentRow = n;
@@ -744,13 +758,17 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 		// Else: save the entry if needed
 		if ( editPanel.isSourceModified() && ( srcCol != -1 )) {
 			TableItem ti = table.getItem(currentRow);
-			ti.setText(srcCol, editPanel.getSourceText());
+			String[] res = editPanel.getSourceText();
+			ti.setText(srcCol, res[0]);
+			ti.setData(Integer.toString(srcCol), res[1]);
 			ti.setData((Integer)ti.getData() | SAVE_SOURCE);
 			needSave = true;
 		}
 		if ( editPanel.isTargetModified() && ( trgCol != -1 )) {
 			TableItem ti = table.getItem(currentRow);
-			ti.setText(trgCol, editPanel.getTargetText());
+			String[] res = editPanel.getTargetText();
+			ti.setText(trgCol, res[0]);
+			ti.setData(Integer.toString(trgCol), res[1]);
 			ti.setData((Integer)ti.getData() | SAVE_TARGET);
 			needSave = true;
 		}
@@ -946,10 +964,12 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 				if ( (signal & SAVE_SOURCE) == SAVE_SOURCE ) {
 					String fn = table.getColumns()[srcCol].getText();
 					segFields.put(fn, ti.getText(srcCol));
+					segFields.put(srcCodesFn, (String)ti.getData(Integer.toString(srcCol)));
 				}
 				if ( (signal & SAVE_TARGET) == SAVE_TARGET ) {
 					String fn = table.getColumns()[trgCol].getText();
 					segFields.put(fn, ti.getText(trgCol));
+					segFields.put(trgCodesFn, (String)ti.getData(Integer.toString(trgCol)));
 				}
 				tm.updateRecord(segKey, tuFields, segFields);
 			}
@@ -1010,7 +1030,8 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 			
 			table.removeAll();
 			currentRow = previousRow = lastRowTested = -1;
-			
+
+			int codesColOffset = opt.getVisibleFields().size();
 			while ( rs.next() ) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(0, String.format("%d", rs.getLong(ITm.SEGKEY_FIELD)));
@@ -1019,6 +1040,15 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 				for ( int i=0; i<opt.getVisibleFields().size(); i++ ) {
 					// +2 because the result set has always seg-key and flag (and 1-based index)
 					item.setText(i+1, rs.getString(i+3)==null ? "" : rs.getString(i+3));
+//test
+					String name = rs.getFieldName(i+3);
+					if ( name.startsWith(DbUtil.TEXT_PREFIX) ) {
+						String codes = rs.getString((i+3)+codesColOffset);
+						String dn = Integer.toString(i+1);
+						item.setData(Integer.toString(i+1), codes);
+//end-test						
+					}
+					
 				}
 			}
 			if ( table.getItemCount() > 0 ) {

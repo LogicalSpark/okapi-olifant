@@ -35,7 +35,7 @@ public class Exporter implements Runnable {
 	private final IProgressCallback callback;
 	private final String tmName;
 	private final IRepository repo;
-	private final DbUtil util;
+	private final ContentFormat cntFmt;
 	private final List<String> locales;
 	private final List<String> fields;
 
@@ -48,7 +48,7 @@ public class Exporter implements Runnable {
 		List<String> locales,
 		List<String> fields)
 	{
-		util = new DbUtil();
+		cntFmt = new ContentFormat();
 		this.callback = callback;
 		this.repo = repo;
 		this.path = path;
@@ -132,7 +132,7 @@ public class Exporter implements Runnable {
 			String textFld = rs.getString(DbUtil.TEXT_PREFIX + srcDbLoc);
 			if ( textFld != null ) { 
 				codesFld = rs.getString(DbUtil.CODES_PREFIX + srcDbLoc);
-				tu.setSourceContent(util.tmFieldsToFragment(textFld, codesFld));
+				tu.setSourceContent(cntFmt.tmFieldsToFragment(textFld, codesFld));
 			}
 			
 			// Targets
@@ -142,7 +142,7 @@ public class Exporter implements Runnable {
 				if ( textFld == null ) continue; // Skip non-existing target
 				codesFld = rs.getString(DbUtil.CODES_PREFIX + loc);
 				tu.setTargetContent(DbUtil.fromOlifantLocaleCode(loc),
-					util.tmFieldsToFragment(textFld, codesFld));
+						cntFmt.tmFieldsToFragment(textFld, codesFld));
 			}
 	
 			// Properties

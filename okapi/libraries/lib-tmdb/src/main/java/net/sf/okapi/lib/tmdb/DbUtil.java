@@ -28,9 +28,6 @@ import java.util.List;
 
 import net.sf.okapi.common.LocaleId;
 import net.sf.okapi.common.Util;
-import net.sf.okapi.common.filterwriter.GenericContent;
-import net.sf.okapi.common.resource.Code;
-import net.sf.okapi.common.resource.TextFragment;
 
 public class DbUtil {
 	
@@ -62,11 +59,6 @@ public class DbUtil {
 		ITERATOR
 	}
 
-	/**
-	 * Cannot use fully static methods as this is used across threads.
-	 */
-	private final GenericContent fmt = new GenericContent();
-	
 	/**
 	 * Gets the Olifant locale code for a given LocaleId object.
 	 * @param locId the LocaleId to convert. The value must not be null or LocaleId.EMPTY.
@@ -174,34 +166,6 @@ public class DbUtil {
 				name, LOC_SEP));
 		}
 		return name;
-	}
-
-	/**
-	 * Splits a text fragment into its generic coded text and a string holding the codes.
-	 * @param frag the text fragment to process.
-	 * @return An array of two strings:
-	 * 0=the coded text, 1=the codes
-	 */
-	public String[] fragmentToTmFields (TextFragment frag) {
-		String[] res = new String[2];
-		res[0] = fmt.setContent(frag).toString();
-		res[1] = Code.codesToString(frag.getCodes());
-		return res;
-	}
-	
-	/**
-	 * Creates a new text fragment from a text and code Olifant fields. 
-	 * @param ctext the text field to use
-	 * @param codes the code field to use
-	 * @return a new text fragment.
-	 */
-	public TextFragment tmFieldsToFragment (String ctext,
-		String codes)
-	{
-		TextFragment tf = new TextFragment("", Code.stringToCodes(codes));
-		fmt.updateFragment(ctext, tf, false);
-		return tf;
-		//return fmt.fromNumericCodedToFragment(ctext, Code.stringToCodes(codes), false);
 	}
 
 	public static List<LinkedHashMap<String, Object>> resultSetToMaps (IRecordSet rs)

@@ -39,7 +39,7 @@ public class Importer implements Runnable {
 	private final ITm tm;
 	private final RawDocument rd;
 	private final IFilterConfigurationMapper fcMapper;
-	private final DbUtil dbUtil = new DbUtil();
+	private final ContentFormat cntFmt = new ContentFormat();
 	
 	public Importer (IProgressCallback progressCallback,
 		ITm tm,
@@ -106,7 +106,7 @@ public class Importer implements Runnable {
 				for ( net.sf.okapi.common.resource.Segment srcSeg : srcSegs ) {
 	
 					// Get the source fields
-					String[] srcFields = dbUtil.fragmentToTmFields(srcSeg.getContent());
+					String[] srcFields = cntFmt.fragmentToTmFields(srcSeg.getContent());
 					map.clear();
 					map.put(DbUtil.TEXT_PREFIX+srcDbLang, srcFields[0]);
 					map.put(DbUtil.CODES_PREFIX+srcDbLang, srcFields[1]);
@@ -128,7 +128,7 @@ public class Importer implements Runnable {
 						// Get the target segment
 						net.sf.okapi.common.resource.Segment trgSeg = tu.getTargetSegments(locId).get(srcSeg.getId());
 						if ( trgSeg != null ) {
-							trgFields = dbUtil.fragmentToTmFields(trgSeg.getContent());
+							trgFields = cntFmt.fragmentToTmFields(trgSeg.getContent());
 						}
 						else {
 							trgFields = new String[2];

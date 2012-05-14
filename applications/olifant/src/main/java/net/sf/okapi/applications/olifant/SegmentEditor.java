@@ -23,8 +23,12 @@ package net.sf.okapi.applications.olifant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.okapi.common.Util;
+import net.sf.okapi.common.filterwriter.GenericContent;
+import net.sf.okapi.common.resource.Code;
+import net.sf.okapi.common.resource.TextFragment;
+import net.sf.okapi.common.ui.Dialogs;
 import net.sf.okapi.common.ui.UIUtil;
+import net.sf.okapi.lib.tmdb.ContentFormat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ExtendedModifyEvent;
@@ -48,13 +52,18 @@ class SegmentEditor {
 
 	private final ISegmentEditorUser caller;
 	private final TextStyle codeStyle;
+	private final ContentFormat cntFmt;
+	private final GenericContent genCnt;
 
 	private int column = -1;
 	private StyledText edit;
 	private boolean modified;
 	private boolean fullCodesMode;
-	private Pattern currentCodes;
-	private String codesAsString;
+	private Pattern codesPattern;
+	private String oriCodesasString;
+	private String oriText;
+	private String lastOkText;
+	private TextFragment frag;
 	private TextOptions textOptions;
 	private Color bgColor;
 
@@ -80,6 +89,9 @@ class SegmentEditor {
 		codeStyle.background = bgColor;
 		//codeStyle.borderStyle = SWT.BORDER_DASH;
 		
+		cntFmt = new ContentFormat();
+		genCnt = new GenericContent();
+
 		edit = new StyledText(parent, flags);
 		if ( gridData == null ) {
 			gridData = new GridData(GridData.FILL_BOTH);
@@ -101,25 +113,25 @@ class SegmentEditor {
 		textOptions.applyTo(edit);
 		
 		fullCodesMode = false;
-		currentCodes = SHORTCODES;
+		codesPattern = SHORTCODES;
 		
 		edit.addExtendedModifyListener(new ExtendedModifyListener() {
 			@Override
-			public void modifyText(ExtendedModifyEvent event) {
+			public void modifyText (ExtendedModifyEvent event) {
 				String text = edit.getText();
-		    	  java.util.List<StyleRange> ranges = new java.util.ArrayList<StyleRange>();
-		    	  Matcher m = currentCodes.matcher(text);
-		    	  while ( m.find() ) {
+				java.util.List<StyleRange> ranges = new java.util.ArrayList<StyleRange>();
+				Matcher m = codesPattern.matcher(text);
+				while ( m.find() ) {
 					StyleRange sr = new StyleRange(codeStyle);
 					sr.start = m.start();
 					sr.length = m.end()-m.start();
 					ranges.add(sr);
-		    	  }		    	  
-		    	  if ( !ranges.isEmpty() ) {
-		    		  edit.replaceStyleRanges(0, text.length(),
-		    			  (StyleRange[])ranges.toArray(new StyleRange[0]));
-		    	  }
-		    	  modified = true;
+				}		    	  
+				if ( !ranges.isEmpty() ) {
+					edit.replaceStyleRanges(0, text.length(),
+						(StyleRange[])ranges.toArray(new StyleRange[0]));
+				}
+				modified = true;
 			}
 		});
 
@@ -249,38 +261,103 @@ class SegmentEditor {
 		// Set the new mode and the associated pattern
 		this.fullCodesMode = fullCodesMode;
 		if ( fullCodesMode ) {
-			currentCodes = REALCODES;
+			codesPattern = REALCODES;
 		}
 		else {
-			currentCodes = SHORTCODES;
+			codesPattern = SHORTCODES;
 		}
-		edit.append(""); // Make a modification to trigger the re-parsing
+		displayText();
+		//edit.append(""); // Make a modification to trigger the re-parsing
 	}
 
 	private boolean validateContent () {
 		if ( !modified ) return true;
 		
-		// Save and validate text in current mode
+		try {
+			// Save and validate text in current mode
+			if ( fullCodesMode ) {
+				return saveTextWithFullCodes();
+			}
+			return saveTextWithShortCodes();
+		}
+		catch ( Throwable e ) {
+			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+			return false;
+		}
+	}
+	
+	private void ensureFragmentExists () {
+		try {
+			if ( frag == null ) {
+				frag = cntFmt.tmFieldsToFragment(oriText, oriCodesasString);
+			}
+		}
+		catch ( Throwable e ) {
+			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+		}
+	}
+	
+	private void displayText () {
+		// A display action should not count as a modification
+		// Remember the modify state
+		boolean prevModified = modified;
+		// Do the display
 		if ( fullCodesMode ) {
-			saveTextWithFullCodes();
+			ensureFragmentExists();
+			edit.setText(cntFmt.FragmentToFullCodesText(frag));
 		}
 		else {
-			saveTextWithShortCodes();
+			edit.setText(lastOkText);
 		}
-		
-		return true;
+		// Restore the modify state
+		modified = prevModified;
 	}
 	
-	private void saveTextWithFullCodes () {
-		
-	}
-	
-	private void saveTextWithShortCodes () {
-//		String text = edit.getText();
-//		Matcher m = SHORTCODES.matcher(text);
+	private boolean saveTextWithFullCodes () {
+		try {
+			// Get the edited text
+			String text = edit.getText();
+			// Check if it's an empty text
+			if ( text.isEmpty() ) {
+				frag = new TextFragment();
+				lastOkText = text;
+				return true;
+			}
 
-		if ( Util.isEmpty(codesAsString) ) return; // Nothing to check
-		
+			// Else: parse the text with XML reader to catch syntax errors
+			TextFragment tf = cntFmt.fullCodesTextToFragment(text);
+			// Convert the fragment to numeric coded text
+			frag = tf;
+			String[] res = cntFmt.fragmentToTmFields(frag);
+			lastOkText = res[0];
+			return true;
+		}
+		catch ( Throwable e ) {
+			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+			return false;
+		}
+	}
+	
+	private boolean saveTextWithShortCodes () {
+		// Get the edited text
+		String text = edit.getText();
+		// Check if it's an empty text
+		if ( text.isEmpty() ) {
+			frag = new TextFragment();
+			lastOkText = text;
+			return true;
+		}
+		// Else: try the validate
+		try {
+			ensureFragmentExists();
+			genCnt.updateFragment(text, frag, true);
+			lastOkText = text;
+		}
+		catch ( Throwable e ) {
+			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+			return false;
+		}
+		return true;
 	}
 
 	public boolean getFullCodesMode () {
@@ -308,7 +385,9 @@ class SegmentEditor {
 
 	public void clear () {
 		edit.setText("");
-		codesAsString = null;
+		oriCodesasString = null;
+		oriText = null;
+		frag = null;
 		modified = false;
 	}
 	
@@ -324,7 +403,8 @@ class SegmentEditor {
 	 * Sets the text of the field, and its originating column.
 	 * @param text the text
 	 * @param codesAsString the codes as a string (can be null if there are no codes)
-	 * @param column the column. Use -1 for no column, -2 for not changing the current one.
+	 * @param column the column value to use when calling the ISegmentEditorUser.notifyOfFocus().
+	 * Use -1 for no column, -2 for not changing the column currently set.
 	 */
 	public void setText (String text,
 		String codesAsString,
@@ -332,19 +412,28 @@ class SegmentEditor {
 	{
 		if ( column != -2 ) this.column = column;
 		edit.setEnabled(text != null);
-		this.codesAsString = codesAsString;
-		if ( text == null ) {
-			edit.setText("");
-		}
-		else {
-			edit.setText(text);
-		}
+		oriCodesasString = codesAsString;
+		if ( text == null ) oriText = "";
+		else oriText = text;
+		lastOkText = oriText;
 		modified = false;
+		frag = null;
+		displayText();
 	}
 
-	public String getText () {
-		validateContent(); 
-		return edit.getText();
+	public String[] getText () {
+		validateContent();
+		String[] res = new String[2];
+		res[0] = lastOkText;
+		// get the codes from either the original or the fragment
+		if ( frag == null ) res[1] = oriCodesasString;
+		else res[1] = Code.codesToString(frag.getCodes());
+		return res;
+	}
+	
+	public String getShortCodedText () {
+		validateContent();
+		return lastOkText;
 	}
 
 //	private void placeText (String text) {

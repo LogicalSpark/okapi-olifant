@@ -239,7 +239,7 @@ class QueryTMForm implements ISegmentEditorUser {
 	
 	private void search () {
 		try {
-			String text = seQuery.getText();
+			String text = seQuery.getShortCodedText();
 			if ( text.trim().isEmpty() ) {
 				Dialogs.showError(shell, "You must enter a text to query.", null);
 				seQuery.setFocus();

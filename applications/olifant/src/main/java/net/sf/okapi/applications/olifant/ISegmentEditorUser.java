@@ -1,5 +1,5 @@
 /*===========================================================================
-  Copyright (C) 2011 by the Okapi Framework contributors
+  Copyright (C) 2011-2012 by the Okapi Framework contributors
 -----------------------------------------------------------------------------
   This library is free software; you can redistribute it and/or modify it 
   under the terms of the GNU Lesser General Public License as published by 
@@ -34,7 +34,7 @@ interface ISegmentEditorUser {
 	
 	/**
 	 * Informs the caller that one of the edit fields has just gain focus.
-	 * @param field feild that just gain the focus: 0=source, 1=target, 2=extra.
+	 * @param field field that just gain the focus: 0=source, 1=target, 2=extra, negative values to ignore.
 	 */
 	public void notifyOfFocus (int field);
 

@@ -7,7 +7,6 @@ MANIFEST.MF
 /deployment/maven/dist_gtk2-linux-x86_64/
 /deployment/maven/done/
 /deployment/maven/tmp/
-/deployment/maven/data/
 
 *.pydevproject
 .metadata

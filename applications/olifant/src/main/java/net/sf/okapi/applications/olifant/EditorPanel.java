@@ -78,15 +78,15 @@ class EditorPanel extends SashForm {
 		extraPanel.setText(text, codesAsText, column);
 	}
 	
-	public String getSourceText () {
+	public String[] getSourceText () {
 		return edSource.getText();
 	}
 		
-	public String getTargetText () {
+	public String[] getTargetText () {
 		return edTarget.getText();
 	}
 	
-	public String getExtraText () {
+	public String[] getExtraText () {
 		return extraPanel.getText();
 	}
 		

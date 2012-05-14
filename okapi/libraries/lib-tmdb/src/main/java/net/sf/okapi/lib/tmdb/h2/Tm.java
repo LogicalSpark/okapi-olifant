@@ -315,11 +315,11 @@ public class Tm implements ITm {
 			}
 			
 			// Add the codes fields if needed
-//			if ( codesFields != null ) {
-//				for ( String name : codesFields ) {
-//					tmp.append(", "+segTable+".\""+name+"\"");
-//				}
-//			}
+			if ( codesFields != null ) {
+				for ( String name : codesFields ) {
+					tmp.append(", "+segTable+".\""+name+"\"");
+				}
+			}
 			
 			// Complete the query
 			if ( hasTUField ) {
@@ -1166,7 +1166,9 @@ public class Tm implements ITm {
 	}
 
 	@Override
-	public void setSortOrder (LinkedHashMap<String, Boolean> fields) {
+	public void setSortOrder (LinkedHashMap<String,
+		Boolean> fields)
+	{
 		orderByFields = fields;
 		updateName(name);
 		needPagingRefresh = true;

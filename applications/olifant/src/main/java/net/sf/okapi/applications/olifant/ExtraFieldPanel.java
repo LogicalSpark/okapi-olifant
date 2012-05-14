@@ -86,7 +86,7 @@ public class ExtraFieldPanel extends SashForm {
 		modified = false;
 	}
 
-	public String getText () {
+	public String[] getText () {
 		return edExtra.getText();
 	}
 	
