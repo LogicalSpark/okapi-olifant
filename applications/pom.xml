@@ -17,5 +17,6 @@
     
     <modules>
         <module>olifant</module>
+		<module>olifant-tmserver</module>
     </modules>
 </project>

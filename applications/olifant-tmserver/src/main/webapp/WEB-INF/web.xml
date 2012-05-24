@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+    <context-param>    
+   		<param-name>repoLocation</param-name>
+   		<param-value>c:/okapi-repo</param-value>
+	</context-param>
+    
+        <context-param>    
+   		<param-name>indexLocation</param-name>
+   		<param-value>c:/okapi-index</param-value>
+	</context-param>
+    
+	<context-param>
+		<param-name>resteasy.scan</param-name>
+		<param-value>true</param-value>
+	</context-param>
+ 
+	<context-param>
+		<param-name>resteasy.servlet.mapping.prefix</param-name>
+		<param-value>/rest</param-value>
+	</context-param>
+
+	
+		
+     <listener>
+        <listener-class>
+            org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+        </listener-class>
+    </listener>
+    
+     <listener>
+     	<listener-class>okapi.tmserver.ContextListener</listener-class>
+     </listener>
+
+  	<servlet>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<servlet-class>
+			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+		</servlet-class>
+		<init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>okapi.tmserver.OkapiTmServerApp</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>resteasy-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	
+	<listener>
+   		<listener-class>okapi.tmserver.RepositoryContextListener</listener-class>
+	</listener>
+	
+</web-app>
