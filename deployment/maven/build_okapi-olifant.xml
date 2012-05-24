@@ -1,8 +1,6 @@
 <?xml version="1.0"?> 
 <project name="okapi-apps" default="all" basedir="."> 
 
-	<!-- This script assumes build_okapi-lib.xml has been run alreday -->
-	
 	<!-- Guess the platform if this build file is not called with the platform already set -->
 	<condition property="platform" value="win32-x86">
 		<os family="windows"/>
@@ -160,6 +158,27 @@
 		
 	</target>
 	
+	<!-- Olifant -->
+	<target name="jumbo">
+		<!-- Copy the jumbo jar -->
+		<copy file="../../applications/jumbo/target/okapi-application-jumbo-${olifantVersion}.jar"
+			tofile="${distLib}/jumbo.jar" />
+		<!-- Copy batch/shell -->
+		<copy todir="${dist}">
+			<fileset dir="data/okapi-apps/common" includes="**/jumbo*"/>
+			<fileset dir="data/okapi-apps/common" includes="**/startJumbo*"/>
+		</copy>
+	</target>
+	
+	<target name="noWinStuff" unless="building-windows">
+		<delete file="${dist}/jumbo.bat"/>
+		<delete file="${dist}/jumboPrompt.bat"/>
+		<delete file="${dist}/startJumboPrompt.bat"/>
+	</target>
+	<target name="winStuff" if="building-windows">
+		<delete file="${dist}/jumbo.sh"/>
+	</target>
+
 	<target name="zipWin" unless="building-linuxmac">
 		<zip destfile="${done}/${distName}.zip" basedir="${dist}"/>
 	</target>
@@ -175,6 +194,6 @@
 		</zip>
 	</target>
 
-	<target name="all" depends="init, olifant, zipWin, zipLinuxMac"/>
+	<target name="all" depends="init, olifant, jumbo, noWinStuff, winStuff, zipWin, zipLinuxMac"/>
 
 </project>
