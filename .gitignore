@@ -37,3 +37,5 @@ local.properties
 /deployment/maven/dist_cocoa-macosx-x86_64
 /deployment/maven/dist_gtk2-linux-x86
 
+
+/deployment/maven/dist_cocoa-macosx

@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>build-applications</artifactId>
+        <groupId>net.sf.okapi.applications</groupId>
+		<!-- Cannot use a variable, but this should be ${okapiOlifantVersion} -->
+		<version>4.0.17-SNAPSHOT</version>
+    </parent>
+    
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>okapi-application-jumbo</artifactId>
+    <name>Okapi Jumbo</name>
+    
+    <dependencies>
+		<dependency>
+			<groupId>net.sf.okapi</groupId>
+			<artifactId>okapi-core</artifactId>
+			<version>${okapiLibVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.okapi.lib</groupId>
+			<artifactId>okapi-lib-tmdb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+    </dependencies>
+
+    <build>
+    
+		<pluginManagement>
+			<plugins>
+    			<!-- Ignore/Execute plugin execution -->
+    			<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+            			<lifecycleMappingMetadata>
+                			<pluginExecutions>
+                    			<!-- copy-dependency plugin -->
+                    			<pluginExecution>
+                		    	    <pluginExecutionFilter>
+                        			    <groupId>org.apache.maven.plugins</groupId>
+                            			<artifactId>maven-dependency-plugin</artifactId>
+                            			<versionRange>[1.0.0,)</versionRange>
+                            			<goals>
+                                			<goal>copy-dependencies</goal>
+                            			</goals>
+                        			</pluginExecutionFilter>
+                        			<action>
+                            			<ignore />
+                        			</action>
+                    			</pluginExecution>
+                			</pluginExecutions>
+            			</lifecycleMappingMetadata>
+        			</configuration>
+    			</plugin>
+   			</plugins>
+   		</pluginManagement>
+   
+    	<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+    				<archive>
+        				<manifest>
+            				<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            				<addClasspath>true</addClasspath>
+	            			<mainClass>net.sf.okapi.applications.jumbo.Main</mainClass>
+    	    			</manifest>
+    				</archive>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-dependency-plugin</artifactId>
+    			<version>2.4</version>
+    			<executions>
+        			<execution>
+            			<id>copy</id>
+            			<phase>install</phase>
+            			<goals>
+                			<goal>copy-dependencies</goal>
+            			</goals>
+            			<configuration>
+                			<outputDirectory>${project.build.directory}/jarslib</outputDirectory>
+            			</configuration>
+        			</execution>
+    			</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

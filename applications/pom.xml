@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <parent>
-		<artifactId>build-okapi-root</artifactId>
+		<artifactId>build-olifant-root</artifactId>
 		<groupId>net.sf.okapi</groupId>
 		<!-- Cannot use a variable, but this should be ${okapiOlifantVersion} -->
 		<version>4.0.17-SNAPSHOT</version>
@@ -17,5 +17,6 @@
     
     <modules>
         <module>olifant</module>
+        <module>jumbo</module>
     </modules>
 </project>
