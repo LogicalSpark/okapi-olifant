@@ -18,6 +18,7 @@
 	
 	<modules>
 		<module>libraries</module>
+		<module>tm</module>
 	</modules>
 
 	<dependencies>
