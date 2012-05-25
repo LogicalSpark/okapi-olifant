@@ -24,8 +24,6 @@
 		<param-value>/rest</param-value>
 	</context-param>
 
-	
-		
      <listener>
         <listener-class>
             org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
@@ -52,9 +50,5 @@
 		<servlet-name>resteasy-servlet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-	
-	<listener>
-   		<listener-class>okapi.tmserver.RepositoryContextListener</listener-class>
-	</listener>
 	
 </web-app>
