@@ -10,7 +10,6 @@ public class OkapiTmServerApp extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(RepoService.class);
         classes.add(RestServicesImpl.class);
         return classes;
     }
