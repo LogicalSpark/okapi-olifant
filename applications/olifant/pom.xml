@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>net.sf.okapi.lib</groupId>
 			<artifactId>okapi-lib-tmdb</artifactId>
-			<version>${project.version}</version>
+			<version>${okapiOlifantVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.okapi.filters</groupId>
