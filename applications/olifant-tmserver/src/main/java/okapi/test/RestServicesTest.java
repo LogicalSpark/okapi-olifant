@@ -1,5 +1,6 @@
 package okapi.test;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,10 +120,21 @@ public class RestServicesTest {
         System.out.println("Number of pages: " + count);
         
         List<HashMap<String, String>> page = tmClient.getPage(null, RENAMED_TEST_TM, 0, 500, "iterator");
-        System.out.println("Page 1: " + page);        
-}
+        System.out.println("Page 1: " + page);
+
+        //provide path to sample tmx
+        //tmClient.importTmx(null, RENAMED_TEST_TM, new File("C:/import.tmx"));
+        
+		File f = tmClient.exportTmx(null, RENAMED_TEST_TM);
+		if(f!=null){
+			System.out.println(f.getPath());
+			System.out.println(f.exists());
+		}else{
+			System.out.println("no file");
+		}
+	}
 	
-	
+
 	static Record createRecord(String index){
         
 		Record rec = new Record();

@@ -1,5 +1,6 @@
 package okapi.shared;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -163,4 +164,19 @@ public interface RestServices
 	public long getSegmentCount(
 			@Context ServletContext ctx,
 			@PathParam("tmName") String tmName);	
+
+	@GET
+	@Path("/{tmName}/export")
+	@Produces("text/xml")
+	public File exportTmx(
+			@Context ServletContext ctx,
+			@PathParam("tmName") String tmName);
+
+	@POST
+	@Path("/{tmName}/import")
+	@Consumes("text/xml")
+	public void importTmx(
+			@Context ServletContext ctx,
+			@PathParam("tmName") String tmName,
+			File f);
 }

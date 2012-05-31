@@ -1,5 +1,7 @@
 package okapi.tmserver;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +11,15 @@ import javax.servlet.ServletContext;
 import okapi.shared.Record;
 import okapi.shared.RestServices;
 
+import net.sf.okapi.common.LocaleId;
+import net.sf.okapi.common.filters.FilterConfigurationMapper;
+import net.sf.okapi.common.resource.RawDocument;
+import net.sf.okapi.lib.tmdb.Exporter;
 import net.sf.okapi.lib.tmdb.IRecordSet;
 import net.sf.okapi.lib.tmdb.IRepository;
 import net.sf.okapi.lib.tmdb.ITm;
 import net.sf.okapi.lib.tmdb.DbUtil.PageMode;
+import net.sf.okapi.lib.tmdb.Importer;
 
 public class RestServicesImpl implements RestServices
 {
@@ -205,11 +212,42 @@ public class RestServicesImpl implements RestServices
 		tm = null;
 		return count;
 	}
-
-
-
 	
+	@Override
+	public File exportTmx(ServletContext ctx, String tmName) {
+		IRepository repo = (IRepository) ctx.getAttribute("repo");
+		ITm tm = repo.openTm(tmName);
+		Exporter exp = new Exporter(null, repo, tmName, null, tm.getLocales(), new ArrayList<String>());
+		return exp.exportNoCallback();
+	}
 	
+	@Override
+	public void importTmx(ServletContext ctx, String tmName, File f) {
+		IRepository repo = (IRepository) ctx.getAttribute("repo");
+		ITm tm = repo.openTm(tmName);
+        
+    	// Create the filter configuration mapping
+        FilterConfigurationMapper fcMapper = new FilterConfigurationMapper();
+		// Get pre-defined configurations
+		fcMapper.addConfigurations("net.sf.okapi.filters.tmx.TmxFilter");
+		/*fcMapper.addConfigurations("net.sf.okapi.filters.xliff.XLIFFFilter");
+		fcMapper.addConfigurations("net.sf.okapi.filters.po.POFilter");
+		fcMapper.addConfigurations("net.sf.okapi.filters.ttx.TTXFilter");
+		fcMapper.addConfigurations("net.sf.okapi.filters.rtf.RTFFilter");
+		fcMapper.addConfigurations("net.sf.okapi.filters.ts.TsFilter");*/
+        
+		// Create the raw document to add to the session
+		URI uri = f.toURI();
+		RawDocument rd = new RawDocument(uri, "UTF-8", new LocaleId("EN"),  new LocaleId("FR"));
+		rd.setFilterConfigId("okf_tmx");
+		
+		Importer imp = new Importer(null, tm, rd, fcMapper);
+		imp.importNoCallback();
+		
+	}
+	
+
+
 	
 	/**
 	 * Generate a serializable list from RecordSet
@@ -232,6 +270,8 @@ public class RestServicesImpl implements RestServices
 		}
 		return list;
 	}
+
+
 
 
 

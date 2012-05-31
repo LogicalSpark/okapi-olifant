@@ -50,8 +50,14 @@
 	<dependency>
 		<groupId>net.sf.okapi.lib</groupId>
 		<artifactId>okapi-lib-tmdb</artifactId>
-		<version>${okapiLibVersion}</version>
+		<version>${okapiOlifantVersion}</version>
 	</dependency>
+	
+			<dependency>
+			<groupId>net.sf.okapi.filters</groupId>
+			<artifactId>okapi-filter-tmx</artifactId>
+			<version>${okapiLibVersion}</version>
+		</dependency>
 	
   </dependencies>
   <build>

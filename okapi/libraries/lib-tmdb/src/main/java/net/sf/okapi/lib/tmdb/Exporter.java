@@ -20,6 +20,7 @@
 
 package net.sf.okapi.lib.tmdb;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -57,6 +58,63 @@ public class Exporter implements Runnable {
 		this.fields = fields;
 	}
 
+	/**
+	 * Temporary server-side alternative until we decide on a callback alternative
+	 * @return
+	 */
+	public File exportNoCallback () {
+		TMXWriter writer = null;
+		ITm tm = null;
+		File outFile = null;
+		
+		try {
+			
+			tm = repo.openTm(tmName);
+			
+			// Add the fields for the locales
+			for ( String loc : locales ) {
+				fields.add(DbUtil.TEXT_PREFIX+loc);
+				fields.add(DbUtil.CODES_PREFIX+loc);
+			}
+			
+			tm.setRecordFields(fields);
+			tm.setPageMode(PageMode.ITERATOR);
+		
+			LocaleId srcLoc = DbUtil.fromOlifantLocaleCode(locales.get(0));
+			LocaleId trgLoc = srcLoc;
+			
+			//create temporary file
+			outFile = File.createTempFile("okapi", ".export");
+			
+			writer = new TMXWriter(outFile.getPath());
+			writer.writeStartDocument(srcLoc, trgLoc, getClass().getCanonicalName(), "1", null, null, null);
+			boolean canceled = false;
+			
+			IRecordSet rs = tm.getFirstPage();
+			while  (( rs != null ) && !canceled ) {
+				while ( rs.next() && !canceled ) {
+					TextUnit tu = toTextUnit(rs, srcLoc);
+					if ( tu != null ) { // TU is null if the conversion failed
+						writer.writeTUFull(tu);
+					}
+				}
+				if ( !canceled ) {
+					rs = tm.getNextPage();
+				}
+			}
+		}
+		catch ( Throwable e ) {
+			System.out.println("Export failed: "+e);
+		}
+		finally {
+			if ( writer != null ) {
+				writer.writeEndDocument();
+				writer.close();
+			}
+		}
+		return outFile;
+	}
+	
 	@Override
 	public void run () {
 		long count = 0;
