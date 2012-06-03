@@ -52,6 +52,109 @@ public class Importer implements Runnable {
 		this.fcMapper = fcMapper;
 	}
 	
+	/**
+	 * Temporary server-side alternative until we decide on a callback alternative
+	 */
+	public void importNoCallback () {
+		IFilter filter = null;
+		boolean canceled = false;
+		boolean flag;
+		try {
+			filter = fcMapper.createFilter(rd.getFilterConfigId());
+			filter.open(rd);
+	
+			LinkedHashMap<String, Object> mapTUProp = new LinkedHashMap<String, Object>();
+			LinkedHashMap<String, Object> mapSrcProp = new LinkedHashMap<String, Object>();
+			LinkedHashMap<String, Object> mapTrgProp = new LinkedHashMap<String, Object>();
+			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+			String[] trgFields;
+			String srcDbLang = DbUtil.toOlifantLocaleCode(rd.getSourceLocale());
+
+//TODO: implement check for duplicates
+//TODO: implement filter for fields
+			tm.startImport();
+			while ( filter.hasNext() && !canceled ) {
+				Event event = filter.next();
+				if ( !event.isTextUnit() ) continue;
+				
+				ITextUnit tu = event.getTextUnit();
+				ISegments srcSegs = tu.getSourceSegments();
+				
+				// Get text-unit level properties
+				mapTUProp.clear();
+				flag = false;
+				for ( String name : tu.getPropertyNames() ) {
+					if ( name.equals(DbUtil.PROP_FLAG) ) {
+						flag = "1".equals(tu.getProperty(name).getValue());
+					}
+					else {
+						if ( DbUtil.isPreDefinedField(name) ) {
+							name = name + "_Bis";
+						}
+						mapTUProp.put(DbUtil.checkFieldName(name), tu.getProperty(name).getValue());
+					}
+				}
+				
+				// Get source container properties
+				mapSrcProp.clear();
+				for ( String name : tu.getSourcePropertyNames() ) {
+					if ( name.equals("lang") ) continue;
+					mapSrcProp.put(DbUtil.checkFieldName(name)+DbUtil.LOC_SEP+srcDbLang, tu.getSourceProperty(name).getValue());
+				}
+	
+				// For each source segment
+				for ( net.sf.okapi.common.resource.Segment srcSeg : srcSegs ) {
+	
+					// Get the source fields
+					String[] srcFields = cntFmt.fragmentToTmFields(srcSeg.getContent());
+					map.clear();
+					map.put(DbUtil.TEXT_PREFIX+srcDbLang, srcFields[0]);
+					map.put(DbUtil.CODES_PREFIX+srcDbLang, srcFields[1]);
+					long tuKey = -1;
+					if ( flag ) {
+						map.put(DbUtil.FLAG_NAME, (Boolean)flag);
+					}
+	
+					// For each target
+					for ( LocaleId locId : tu.getTargetLocales() ) {
+						String trgDbLang = DbUtil.toOlifantLocaleCode(locId);
+						
+						mapTrgProp.clear();
+						for ( String name : tu.getTargetPropertyNames(locId) ) {
+							if ( name.equals("lang") ) continue;
+							mapTrgProp.put(DbUtil.checkFieldName(name)+DbUtil.LOC_SEP+trgDbLang, tu.getTargetProperty(locId, name).getValue());
+						}
+						
+						// Get the target segment
+						net.sf.okapi.common.resource.Segment trgSeg = tu.getTargetSegments(locId).get(srcSeg.getId());
+						if ( trgSeg != null ) {
+							trgFields = cntFmt.fragmentToTmFields(trgSeg.getContent());
+						}
+						else {
+							trgFields = new String[2];
+						}
+						map.put(DbUtil.TEXT_PREFIX+trgDbLang, trgFields[0]);
+						map.put(DbUtil.CODES_PREFIX+trgDbLang, trgFields[1]);
+					}
+					// Add the record to the database
+					map.putAll(mapSrcProp);
+					map.putAll(mapTrgProp);
+					tuKey = tm.addRecord(tuKey, mapTUProp, map);
+				}
+			}
+		}
+		catch ( Throwable e ) {
+			System.out.println("Import failed: "+e);
+		}
+		finally {
+			// Final update (includes notifying the observers that we are done)
+			tm.finishImport();
+			if ( filter != null ) {
+				filter.close();
+			}
+		}
+	}
+	
 	@Override
 	public void run () {
 		long count = 0;
