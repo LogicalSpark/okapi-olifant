@@ -30,8 +30,8 @@ import java.util.ArrayList;
 
 public class Main {
 
+	private Interpreter interp;
 	private static PrintStream ps;
-	private Context ctx;
 	
 	static public void main (String[] args) {
 		try {
@@ -63,13 +63,13 @@ public class Main {
 		BufferedReader br = null;
 		ps = null;
 		try {
-			ctx = new Context();
 			br = new BufferedReader(new InputStreamReader(System.in));
 			// Create an encoding-aware output for the console
 			// System.out uses the default system encoding that
 			// may not be the right one (e.g. windows-1252 vs cp850)
 			ps = new PrintStream(System.out, true, getConsoleEncodingName());
-			
+
+			interp = new Interpreter(ps);
 			showBanner();
 			
 			// Process the command-line parameters
@@ -78,8 +78,10 @@ public class Main {
 			// Main loop
 			while ( true ) {
 				showPrompt();
-				String cmd = br.readLine(); // in.nextLine();
-				execute(cmd);
+				if ( !interp.execute(br.readLine()) ) {
+					ps.println("Session closed");
+					System.exit(0);
+				}
 			}
 		}
 		catch ( Throwable e ) {
@@ -98,13 +100,9 @@ public class Main {
 	}
 
 	private void showPrompt () {
-		ps.print("J>");
+		ps.print("--TM: "+interp.getCurrentTmName()+"\nJ>");
 	}
 	
-	private void showContext () {
-		ps.println(String.format("Source: %s", ctx.srcLoc.toString()));
-	}
-
 	private void showBanner () {
 		ps.println("-------------------------------------------------------------------------------"); //$NON-NLS-1$
 		ps.println("Okapi Jumbo - Olifant Console");
@@ -147,22 +145,4 @@ public class Main {
 		return true;
 	}
 	
-	private void execute (String cmd) {
-		cmd = cmd.trim();
-		
-		if ( cmd.equals("exit") ) {
-			ps.println("Session closed");
-			System.exit(0);
-		}
-		else if ( cmd.equals("info") ) {
-			showInfo();
-		}
-		else if ( cmd.equals("ctx") || cmd.equals("context") ) {
-			showContext();
-		}
-		else {
-			ps.println("Syntax error or unknown command: \""+cmd+"\"");
-		}
-	}
-
 }
