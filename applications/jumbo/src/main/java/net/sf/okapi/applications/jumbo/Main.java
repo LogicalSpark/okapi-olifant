@@ -100,7 +100,7 @@ public class Main {
 	}
 
 	private void showPrompt () {
-		ps.print("--TM: "+interp.getCurrentTmName()+"\nJ>");
+		ps.print(""+interp.getCurrentTmName()+" J>");
 	}
 	
 	private void showBanner () {

@@ -134,6 +134,11 @@ public class Tm implements ITm {
 		recordFields.add(Repository.SEG_COL_FLAG);
 		recordFields.addAll(names);
 	}
+	
+	@Override
+	public List<String> getRecordFields () {
+		return recordFields;
+	}
 
 	@Override
 	public void startImport () {

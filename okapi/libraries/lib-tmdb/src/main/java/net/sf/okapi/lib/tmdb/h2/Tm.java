@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,6 +262,12 @@ public class Tm implements ITm {
 	public void setRecordFields (List<String> names) {
 		recordFields = names;
 		updateMainQueries();
+	}
+	
+	@Override
+	public List<String> getRecordFields () {
+		if ( recordFields == null ) return Collections.emptyList();
+		else return recordFields;
 	}
 	
 	private void updateMainQueries () {

@@ -104,6 +104,12 @@ public interface ITm {
 	public void setRecordFields (List<String> names);
 	
 	/**
+	 * Gets the list of fields returned by {@link #getNextPage()} and other paging methods.
+	 * @return the list of fields retruned by the paging methods.
+	 */
+	public List<String> getRecordFields ();
+	
+	/**
 	 * Sets the sort order in which the records should be retrieved with {@link #getNextPage()}
 	 * or other paging methods.
 	 * @param fields list of the fields to sort on. The first on is the primary field,

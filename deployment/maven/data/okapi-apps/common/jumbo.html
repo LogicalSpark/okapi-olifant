@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<h1>Jumbo</h1>
+<p>Jumbo is a shell to execute many operation on the same TM repositories as 
+Olifant. You can think of it as the command-line version of Olifant.</p>
+<h2>Commands</h2>
+<pre>use[ memory|default|&lt;path&gt;]</pre>
+<p>Sets the repository to work with. If no parameter is given, the default is 
+<code>default</code>.</p>
+<p>use memory</p>
+<p>Opens a in-memory repository.</p>
+<p>use default</p>
+<p>Opens the local default repository. It creates it if there is no existing 
+one.</p>
+<p>&nbsp;</p>
+<pre>open &lt;tmName&gt;[ &lt;srcLoc&gt;[ &lt;trgLoc&gt;]]</pre>
+<pre>close[ &lt;tmName&gt;|all]</pre>
+<p>Closes one or all TM. If no parameter is provided, the command closes the 
+current TM (if one is open).</p>
+<p>close all</p>
+<p>Closes all open TMs.</p>
+<p>close &lt;tmName&gt;</p>
+<p>&nbsp;</p>
+<pre>create &lt;tmName&gt;[ &lt;srcLoc&gt;[ &lt;trgLoc&gt;]]</pre>
+<pre>add locale &lt;locale&gt;</pre>
+<pre>add field &lt;fieldName&gt;</pre>
+<pre>remove locale &lt;locale&gt;</pre>
+<pre>remove field &lt;fieldName&gt;</pre>
+<pre>set source &lt;srcLoc&gt;</pre>
+<pre>set target &lt;trgLoc&gt;</pre>
+<pre>&lt;alias&gt; is &lt;name&gt;</pre>
+<pre>quit|exit</pre>
+<pre>close[ &lt;tmName&gt;]</pre>
+<pre>show tms</pre>
+<pre>show columns</pre>
+<p>Displays the list of the fields that are shown when listing entries. To list 
+all the fields of the TM use <code>show fields</code>.</p>
+<pre>show fields</pre>
+<p>Displays the list of the fields available in the TM.</p>
+<pre>show locales</pre>
+<p>Displays the list of the locales in the current TM.</p>
+<pre>show aliases</pre>
+<pre>&nbsp;</pre>
+
+</html>

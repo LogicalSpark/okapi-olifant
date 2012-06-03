@@ -31,9 +31,10 @@ public class Token {
 	}
 	
 	static enum OPERATOR {
-		SHOW_CONTEXT,
 		USE_REPOSITORY,
 		CREATE_TM,
+		OPEN_TM,
+		CLOSE_TM,
 		SHOW,
 		QUIT
 	}
@@ -42,12 +43,12 @@ public class Token {
 	static {
 		LOOKUP.put("quit", OPERATOR.QUIT);
 		LOOKUP.put("exit", OPERATOR.QUIT);
-		LOOKUP.put("context", OPERATOR.SHOW_CONTEXT);
-		LOOKUP.put("ctx", OPERATOR.SHOW_CONTEXT);
 		LOOKUP.put("use", OPERATOR.USE_REPOSITORY);
 		LOOKUP.put("create", OPERATOR.CREATE_TM);
 		LOOKUP.put("show", OPERATOR.SHOW);
 		LOOKUP.put("sh", OPERATOR.SHOW);
+		LOOKUP.put("open", OPERATOR.OPEN_TM);
+		LOOKUP.put("close", OPERATOR.CLOSE_TM);
 	}
 	
 	private TYPE type;
