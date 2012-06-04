@@ -14,37 +14,24 @@ body, td {
 <h1>Okapi Jumbo</h1>
 <p>Jumbo is a shell program that allows you to execute from a command-line prompt many 
 of the operations you can perform with Olifant.</p>
-<pre>&lt;No active repository&gt; J&gt;use default
-repository: defaultOlifantLocalRepository
-TMs in the repository:
-- test1
-- test2
-
-&lt;no active TM&gt; J&gt;open test2
-
-test2 J&gt;show locales
-&quot;EN&quot;, &quot;FR&quot;
-
-test2 J&gt;</pre>
 <h2>Commands</h2>
-<pre>use[ memory|default|&lt;path&gt;]</pre>
-<p>Sets the repository to work with. If no parameter is given, the default is 
-<code>default</code>.</p>
-<p>use memory</p>
-<p>Opens a in-memory repository.</p>
-<p>use default</p>
+<pre>use[ default]</pre>
 <p>Opens the local default repository. It creates it if there is no existing 
 one.</p>
-<p>&nbsp;</p>
+<pre>use memory</pre>
+<p>Opens an in-memory repository.</p>
 <pre>open &lt;tmName&gt;[ &lt;srcLoc&gt;[ &lt;trgLoc&gt;]]</pre>
-<pre>close[ &lt;tmName&gt;|all]</pre>
-<p>Closes one or all TM. If no parameter is provided, the command closes the 
-current TM (if one is open).</p>
-<p>close all</p>
+<p>Opens the TM &lt;tmName&gt;. This TM becomes the current TM. You can have several 
+TMs open at the same time. To switch TM, just to an <code>open &lt;tmName&gt;</code> 
+command again.</p>
+<pre>close[ &lt;tmName&gt;]</pre>
+<p>Closes the TM named &lt;tmName&gt;. If the parameter is not provided, the current 
+TM (if there is one) is closed.</p>
+<pre>close all</pre>
 <p>Closes all open TMs.</p>
-<p>close &lt;tmName&gt;</p>
-<p>&nbsp;</p>
-<pre>create &lt;tmName&gt;[ &lt;srcLoc&gt;[ &lt;trgLoc&gt;]]</pre>
+<pre>create &lt;tmName&gt;[ &lt;srcLoc&gt;]</pre>
+<p>Creates a new TM in the repository. If that TM exists already, it is simply 
+opened. The TM becomes the current TM.</p>
 <pre>add locale &lt;locale&gt;</pre>
 <pre>add field &lt;fieldName&gt;</pre>
 <pre>remove locale &lt;locale&gt;</pre>
@@ -53,27 +40,21 @@ current TM (if one is open).</p>
 <pre>set target &lt;trgLoc&gt;</pre>
 <pre>&lt;alias&gt; is &lt;name&gt;</pre>
 <pre>quit|exit</pre>
-<pre>close[ &lt;tmName&gt;]</pre>
+<p>Exit the applications.</p>
 <pre>show tms</pre>
+<p>Lists all the TMs in the current repository (if one is active).</p>
 <pre>show columns</pre>
-<p>Displays the list of the fields that are shown when listing entries. To list 
+<p>Displays the list of the fields in the current TM, that are shown when listing entries. To list 
 all the fields of the TM use <code>show fields</code>.</p>
 <pre>show fields</pre>
-<p>Displays the list of the fields available in the TM.</p>
+<p>Displays the list of the fields available in the current TM.</p>
 <pre>show locales</pre>
 <p>Displays the list of the locales in the current TM.</p>
-<pre>show aliases</pre>
-<pre>&nbsp;</pre>
 
+<h2>Parameters</h2>
+<p>TODO</p>
 <h2>Examples</h2>
-<p>Add a field to a TMX file</p>
-<pre>J&gt;<span style="background-color: #00FFFF">use memory</span>
-J&gt;<span style="background-color: #00FFFF">import myfile.tmx mytm</span>
-mytm J&gt;<span style="background-color: #00FFFF">add field newFiledName</span>
-mytm J&gt;<span style="background-color: #00FFFF">export myfile.tmx</span></pre>
-<pre>C:\&gt;jumbo -c &quot;use memory; import myfile.tmx; add myfield; export myfile.tmx; quit&quot;</pre>
-<pre>&nbsp;</pre>
-<p>&nbsp;</p>
+<p>TODO</p>
 
 
 </html>
