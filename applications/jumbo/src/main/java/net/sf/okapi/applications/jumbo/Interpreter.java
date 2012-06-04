@@ -369,6 +369,11 @@ public class Interpreter {
 		ps.println(" show locales : Lists all locales in the current TM");
 		ps.println(" show fields : Lists all fields in the current TM");
 		ps.println(" show columns : Lists all fields displayed");
+		ps.println(" add locale <locale> : Adds a locale to the current TM");
+		ps.println(" add field <name> : Adds a field to the current TM");
+		ps.println(" delete tm <tmName>: Delete the given TM");
+		ps.println(" delete locale <locale>: Delete the given locale from the current TM");
+		ps.println(" delete field <name>: Delete the given field from the current TM");
 	}
 
 }

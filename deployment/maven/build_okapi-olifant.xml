@@ -168,6 +168,8 @@
 			<fileset dir="data/okapi-apps/common" includes="**/jumbo*"/>
 			<fileset dir="data/okapi-apps/common" includes="**/startJumbo*"/>
 		</copy>
+		<replace file="${dist}/jumbo.html" token="@version@" value="${olifantVersion}"/>
+		<replace file="${dist}/jumbo.html" token="@date@" value="${TODAY}"/>
 	</target>
 	
 	<target name="noWinStuff" unless="building-windows">
