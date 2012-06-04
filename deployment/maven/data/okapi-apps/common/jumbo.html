@@ -1,11 +1,31 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+<!--
+body, td {
+ font-family: verdana, sans-serif;
+ font-size: 12pt
+}
+-->
+</style>
 </head>
 
-<h1>Jumbo</h1>
-<p>Jumbo is a shell to execute many operation on the same TM repositories as 
-Olifant. You can think of it as the command-line version of Olifant.</p>
+<h1>Okapi Jumbo</h1>
+<p>Jumbo is a shell program that allows you to execute from a command-line prompt many 
+of the operations you can perform with Olifant.</p>
+<pre>&lt;No active repository&gt; J&gt;use default
+repository: defaultOlifantLocalRepository
+TMs in the repository:
+- test1
+- test2
+
+&lt;no active TM&gt; J&gt;open test2
+
+test2 J&gt;show locales
+&quot;EN&quot;, &quot;FR&quot;
+
+test2 J&gt;</pre>
 <h2>Commands</h2>
 <pre>use[ memory|default|&lt;path&gt;]</pre>
 <p>Sets the repository to work with. If no parameter is given, the default is 
@@ -44,5 +64,16 @@ all the fields of the TM use <code>show fields</code>.</p>
 <p>Displays the list of the locales in the current TM.</p>
 <pre>show aliases</pre>
 <pre>&nbsp;</pre>
+
+<h2>Examples</h2>
+<p>Add a field to a TMX file</p>
+<pre>J&gt;<span style="background-color: #00FFFF">use memory</span>
+J&gt;<span style="background-color: #00FFFF">import myfile.tmx mytm</span>
+mytm J&gt;<span style="background-color: #00FFFF">add field newFiledName</span>
+mytm J&gt;<span style="background-color: #00FFFF">export myfile.tmx</span></pre>
+<pre>C:\&gt;jumbo -c &quot;use memory; import myfile.tmx; add myfield; export myfile.tmx; quit&quot;</pre>
+<pre>&nbsp;</pre>
+<p>&nbsp;</p>
+
 
 </html>

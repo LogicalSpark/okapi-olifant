@@ -74,6 +74,17 @@ public class Interpreter {
 					checkParameters(tokens, "O#S#all|$name");
 					closeTm(tokens);
 					break;
+				case HELP:
+					showUsage();
+					break;
+				case ADD:
+					checkParameters(tokens, "M#S#locale|field", "M#S#$any");
+					add(tokens);
+					break;
+				case DELETE:
+					checkParameters(tokens, "M#S#tm|locale|field", "M#S#$any");
+					delete(tokens);
+					break;
 				}
 			}
 		}
@@ -296,5 +307,68 @@ public class Interpreter {
 			throw new RuntimeException("Too many parameters.");
 		}
 	}
+
+	private void add (List<Token> tokens) {
+		if ( tm == null ) return;
+		String what = tokens.get(1).getString();
+		if ( what.equals("locale") ) {
+			String locCode = DbUtil.toOlifantLocaleCode(new LocaleId(tokens.get(2).getString()));
+			tm.addLocale(locCode);
+		}
+		else if ( what.equals("field") ) {
+			String fn = DbUtil.checkFieldName(tokens.get(2).getString());
+			tm.addField(fn);
+		}
+	}
+
+	private void delete (List<Token> tokens) {
+		if ( repo == null ) return;
+		String what = tokens.get(1).getString();
+		
+		if ( what.equals("tm") ) {
+			// Get the name
+			String tmName = tokens.get(2).getString();
+			// Check if it exists
+			List<String> list = repo.getTmNames();
+			if ( list.indexOf(tmName) == -1 ) {
+				ps.println(String.format("There are no TMs '%s' in the repository", tmName));
+				return;
+			}
+			// Check if it's the active one
+			boolean isCurrent = (( tm != null ) && tm.getName().equals(tmName));
+			// Delete it from the repository
+			repo.deleteTm(tmName);
+			// reset the current TM if it was the one we just deleted
+			if ( isCurrent ) tm = null;
+			// We are done
+			return;
+		}
+		
+		if ( tm == null ) return;
+		if ( what.equals("locale") ) {
+			String locCode = DbUtil.toOlifantLocaleCode(new LocaleId(tokens.get(2).getString()));
+			tm.deleteLocale(locCode);
+		}
+		else if ( what.equals("field") ) {
+			String fn = DbUtil.checkFieldName(tokens.get(2).getString());
+			tm.deleteField(fn);
+		}
+		
+	}
 	
+	private void showUsage () {
+		ps.println(" help|? : Shows this screen");
+		ps.println(" quit|exit : Exits jumbo");
+		ps.println(" use[ default] : Opens the default local repository");
+		ps.println(" use memory : Opens a in-memory repository");
+		ps.println(" open <tmName> : Opens a TM");
+		ps.println(" create <tmName>[ <srcLocale>] : Creates a TM");
+		ps.println(" close[ <tmName>] : Closes an open TM");
+		ps.println(" close all] : Closes all open TMs");
+		ps.println(" show tms : Lists all TMS in the repository");
+		ps.println(" show locales : Lists all locales in the current TM");
+		ps.println(" show fields : Lists all fields in the current TM");
+		ps.println(" show columns : Lists all fields displayed");
+	}
+
 }

@@ -36,7 +36,10 @@ public class Token {
 		OPEN_TM,
 		CLOSE_TM,
 		SHOW,
-		QUIT
+		QUIT,
+		ADD,
+		DELETE,
+		HELP
 	}
 	
 	static HashMap<String, OPERATOR> LOOKUP = new HashMap<String, OPERATOR>();
@@ -49,6 +52,11 @@ public class Token {
 		LOOKUP.put("sh", OPERATOR.SHOW);
 		LOOKUP.put("open", OPERATOR.OPEN_TM);
 		LOOKUP.put("close", OPERATOR.CLOSE_TM);
+		LOOKUP.put("add", OPERATOR.ADD);
+		LOOKUP.put("delete", OPERATOR.DELETE);
+		LOOKUP.put("del", OPERATOR.DELETE);
+		LOOKUP.put("help", OPERATOR.HELP);
+		LOOKUP.put("?", OPERATOR.HELP);
 	}
 	
 	private TYPE type;

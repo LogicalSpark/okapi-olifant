@@ -30,8 +30,9 @@ import java.util.ArrayList;
 
 public class Main {
 
+	private PrintStream ps;
 	private Interpreter interp;
-	private static PrintStream ps;
+	private String argCmd;
 	
 	static public void main (String[] args) {
 		try {
@@ -78,9 +79,20 @@ public class Main {
 			// Main loop
 			while ( true ) {
 				showPrompt();
-				if ( !interp.execute(br.readLine()) ) {
-					ps.println("Session closed");
-					System.exit(0);
+				if ( argCmd == null ) {
+					argCmd = br.readLine();
+				}
+				else {
+					ps.println(argCmd);
+				}
+				// Split by command
+				String[] cmds = argCmd.split(";", 0);
+				argCmd = null;
+				for ( String cmd : cmds ) {
+					if ( !interp.execute(cmd) ) {
+						ps.println("Session closed");
+						System.exit(0);
+					}
 				}
 			}
 		}
@@ -139,6 +151,13 @@ public class Main {
 			String arg = args.get(i);
 			if ( arg.equals("-info") ) {
 				showInfo();
+			}
+			if ( arg.equals("-c") ) {
+				if ( args.size() < i ) {
+					throw new RuntimeException("You must have a command parameter for -c.");
+				}
+				i++; // Move to next
+				argCmd = args.get(i);
 			}
 		}
 		
