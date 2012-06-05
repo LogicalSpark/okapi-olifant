@@ -28,7 +28,7 @@ import net.sf.okapi.common.ui.Dialogs;
 import net.sf.okapi.common.ui.OKCancelPanel;
 import net.sf.okapi.common.ui.TextAndBrowsePanel;
 import net.sf.okapi.common.ui.UIUtil;
-import net.sf.okapi.common.ui.UserConfiguration;
+import net.sf.okapi.common.UserConfiguration;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

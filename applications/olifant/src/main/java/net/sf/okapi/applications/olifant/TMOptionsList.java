@@ -1,5 +1,5 @@
 /*===========================================================================
-  Copyright (C) 2011 by the Okapi Framework contributors
+  Copyright (C) 2011-2012 by the Okapi Framework contributors
 -----------------------------------------------------------------------------
   This library is free software; you can redistribute it and/or modify it 
   under the terms of the GNU Lesser General Public License as published by 
@@ -23,7 +23,7 @@ package net.sf.okapi.applications.olifant;
 import java.util.Iterator;
 
 import net.sf.okapi.common.IParameters;
-import net.sf.okapi.common.ui.UserConfiguration;
+import net.sf.okapi.common.UserConfiguration;
 
 public class TMOptionsList extends UserConfiguration {
 	

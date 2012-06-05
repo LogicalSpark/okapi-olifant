@@ -36,7 +36,7 @@ import net.sf.okapi.common.ui.Dialogs;
 import net.sf.okapi.common.ui.InputDocumentDialog;
 import net.sf.okapi.common.ui.ResourceManager;
 import net.sf.okapi.common.ui.UIUtil;
-import net.sf.okapi.common.ui.UserConfiguration;
+import net.sf.okapi.common.UserConfiguration;
 import net.sf.okapi.lib.tmdb.ITm;
 import net.sf.okapi.lib.tmdb.Importer;
 

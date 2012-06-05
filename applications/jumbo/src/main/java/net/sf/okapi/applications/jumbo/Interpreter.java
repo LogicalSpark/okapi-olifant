@@ -121,9 +121,26 @@ public class Interpreter {
 	}
 
 	String getCurrentTmName () {
-		if ( repo == null ) return "<No active repository>";
+		if ( repo == null ) return "[No active repository]";
 		if ( tm != null ) return tm.getName();
-		return "<No active TM>";
+		return "[No active TM]";
+	}
+	
+	private boolean hasActiveRepository () {
+		if ( repo == null ) {
+			ps.println("There is no active repository.");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean hasActiveTm () {
+		if ( !hasActiveRepository() ) return false;
+		if ( tm == null ) {
+			ps.println("There is no active TM.");
+			return false;
+		}
+		return true;
 	}
 	
 	private void show (ArrayList<Token> tokens,
@@ -140,10 +157,7 @@ public class Interpreter {
 	}
 	
 	private void showAll () {
-		if ( repo == null ) {
-			ps.println("No repository open.");
-			return;
-		}
+		if ( !hasActiveRepository() ) return;
 		ps.println("Repository: "+repo.getName());
 		showTMs();
 	}
@@ -165,7 +179,7 @@ public class Interpreter {
 	}
 	
 	private void createTm (ArrayList<Token> tokens) {
-		if ( repo == null ) return;
+		if ( !hasActiveRepository() ) return;
 		String srcLoc = "en";
 		if ( tokens.size() == 3 ) srcLoc = tokens.get(2).getString();
 		String srcCode = DbUtil.toOlifantLocaleCode(LocaleId.fromString(srcLoc));
@@ -177,7 +191,7 @@ public class Interpreter {
 	}
 
 	private void openTm (ArrayList<Token> tokens) {
-		if ( repo == null ) return;
+		if ( !hasActiveRepository() ) return;
 		ITm tmp = repo.openTm(tokens.get(1).getString());
 		if ( tmp != null ) {
 			tms.add(tmp);
@@ -186,10 +200,13 @@ public class Interpreter {
 	}
 
 	private void closeTm (ArrayList<Token> tokens) {
-		if ( repo == null ) return;
+		if ( !hasActiveRepository() ) return;
 		String tmName = null;
 		if ( tokens.size() > 1 ) tmName = tokens.get(1).getString();
-		else if ( tm != null ) tmName = tm.getName();
+		else {
+			if ( !hasActiveTm() ) return;
+			tmName = tm.getName();
+		}
 		
 		if ( tmName == null ) return; // Nothing to do
 
@@ -212,7 +229,7 @@ public class Interpreter {
 	}
 
 	private void showTMs () {
-		if ( repo == null ) return;
+		if ( !hasActiveRepository() ) return;
 		List<String> list = repo.getTmNames();
 		if ( list.isEmpty() ) ps.println("There are no TMs in the repository");
 		else {
@@ -224,7 +241,7 @@ public class Interpreter {
 	}
 	
 	private void showLocales () {
-		if ( tm == null ) return;
+		if ( !hasActiveTm() ) return;
 		boolean first = true;
 		for ( String loc : tm.getLocales() ) {
 			if ( first ) first = false;
@@ -235,7 +252,7 @@ public class Interpreter {
 	}
 	
 	private void showAvailableFields () {
-		if ( tm == null ) return;
+		if ( !hasActiveTm() ) return;
 		boolean first = true;
 		for ( String fn : tm.getAvailableFields() ) {
 			if ( first ) first = false;
@@ -246,7 +263,7 @@ public class Interpreter {
 	}
 	
 	private void showColumns () {
-		if ( tm == null ) return;
+		if ( !hasActiveTm() ) return;
 		boolean first = true;
 		
 		for ( String fn : tm.getRecordFields() ) {
@@ -309,7 +326,7 @@ public class Interpreter {
 	}
 
 	private void add (List<Token> tokens) {
-		if ( tm == null ) return;
+		if ( !hasActiveTm() ) return;
 		String what = tokens.get(1).getString();
 		if ( what.equals("locale") ) {
 			String locCode = DbUtil.toOlifantLocaleCode(new LocaleId(tokens.get(2).getString()));
@@ -322,7 +339,7 @@ public class Interpreter {
 	}
 
 	private void delete (List<Token> tokens) {
-		if ( repo == null ) return;
+		if ( !hasActiveRepository() ) return;
 		String what = tokens.get(1).getString();
 		
 		if ( what.equals("tm") ) {
@@ -344,7 +361,7 @@ public class Interpreter {
 			return;
 		}
 		
-		if ( tm == null ) return;
+		if ( !hasActiveTm() ) return;
 		if ( what.equals("locale") ) {
 			String locCode = DbUtil.toOlifantLocaleCode(new LocaleId(tokens.get(2).getString()));
 			tm.deleteLocale(locCode);
@@ -357,23 +374,23 @@ public class Interpreter {
 	}
 	
 	private void showUsage () {
-		ps.println(" help|? : Shows this screen");
-		ps.println(" quit|exit : Exits jumbo");
-		ps.println(" use[ default] : Opens the default local repository");
-		ps.println(" use memory : Opens a in-memory repository");
-		ps.println(" open <tmName> : Opens a TM");
-		ps.println(" create <tmName>[ <srcLocale>] : Creates a TM");
-		ps.println(" close[ <tmName>] : Closes an open TM");
-		ps.println(" close all] : Closes all open TMs");
-		ps.println(" show tms : Lists all TMS in the repository");
-		ps.println(" show locales : Lists all locales in the current TM");
-		ps.println(" show fields : Lists all fields in the current TM");
-		ps.println(" show columns : Lists all fields displayed");
-		ps.println(" add locale <locale> : Adds a locale to the current TM");
-		ps.println(" add field <name> : Adds a field to the current TM");
-		ps.println(" delete tm <tmName>: Delete the given TM");
-		ps.println(" delete locale <locale>: Delete the given locale from the current TM");
-		ps.println(" delete field <name>: Delete the given field from the current TM");
+		ps.println("- help|? : Shows this screen");
+		ps.println("- quit|exit : Exits jumbo");
+		ps.println("- use[ default] : Opens the default local repository");
+		ps.println("- use memory : Opens a in-memory repository");
+		ps.println("- open <tmName> : Opens a TM");
+		ps.println("- create <tmName>[ <srcLocale>] : Creates a TM");
+		ps.println("- close[ <tmName>] : Closes an open TM");
+		ps.println("- close all : Closes all open TMs");
+		ps.println("- show tms : Lists all TMS in the repository");
+		ps.println("- show locales : Lists all locales in the current TM");
+		ps.println("- show fields : Lists all fields in the current TM");
+		ps.println("- show columns : Lists all fields displayed");
+		ps.println("- add locale <locale> : Adds a locale to the current TM");
+		ps.println("- add field <name> : Adds a field to the current TM");
+		ps.println("- delete tm <tmName>: Delete the given TM");
+		ps.println("- delete locale <locale>: Delete the given locale from the current TM");
+		ps.println("- delete field <name>: Delete the given field from the current TM");
 	}
 
 }
