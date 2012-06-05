@@ -18,7 +18,7 @@
   See also the full LGPL text here: http://www.gnu.org/copyleft/lesser.html
 ===========================================================================*/
 
-package net.sf.okapi.applications.olifant;
+package net.sf.okapi.lib.tmdb;
 
 import java.util.Iterator;
 
@@ -29,7 +29,7 @@ public class TMOptionsList extends UserConfiguration {
 	
 	private static final long serialVersionUID = 1L;
 
-	TMOptions getItem (String uuid,
+	public TMOptions getItem (String uuid,
 		boolean createIfNeeded)
 	{
 		String data = getProperty(uuid);
@@ -49,14 +49,21 @@ public class TMOptionsList extends UserConfiguration {
 		return null;
 	}
 
-	void setItem (TmPanel tp) {
-		setProperty(tp.getTm().getUUID(), tp.getTmOptions().toString());
+	/**
+	 * Sets the data for the given TM.
+	 * @param uuid the UUID of the TM.
+	 * @param data The data saved as a string of the options for this TM.
+	 */
+	public void setItem (String uuid,
+		String data)
+	{
+		setProperty(uuid, data);
 	}
 
 	/**
 	 * Removes from the list any entry that has its last-usage time older than 30 days.
 	 */
-	void purgeOldItems () {
+	public void purgeOldItems () {
 		final long limit = System.currentTimeMillis() - (((1000L*60L)*24)*30);
 		Iterator<Object> iter = keySet().iterator();
 		while ( iter.hasNext() ) {

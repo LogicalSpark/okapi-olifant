@@ -39,6 +39,7 @@ import net.sf.okapi.common.ui.UIUtil;
 import net.sf.okapi.common.UserConfiguration;
 import net.sf.okapi.lib.tmdb.ITm;
 import net.sf.okapi.lib.tmdb.Importer;
+import net.sf.okapi.lib.tmdb.TMOptions;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;

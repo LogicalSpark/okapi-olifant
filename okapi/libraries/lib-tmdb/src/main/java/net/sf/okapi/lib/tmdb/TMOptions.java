@@ -18,7 +18,7 @@
   See also the full LGPL text here: http://www.gnu.org/copyleft/lesser.html
 ===========================================================================*/
 
-package net.sf.okapi.applications.olifant;
+package net.sf.okapi.lib.tmdb;
 
 import java.util.ArrayList;
 import java.util.Iterator;

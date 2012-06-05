@@ -39,6 +39,7 @@ import net.sf.okapi.lib.tmdb.Location;
 import net.sf.okapi.lib.tmdb.SearchAndReplace;
 import net.sf.okapi.lib.tmdb.SearchAndReplaceOptions;
 import net.sf.okapi.lib.tmdb.SearchAndReplaceOptions.ACTION;
+import net.sf.okapi.lib.tmdb.TMOptions;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;

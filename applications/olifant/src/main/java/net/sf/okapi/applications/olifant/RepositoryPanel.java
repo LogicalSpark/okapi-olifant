@@ -41,6 +41,8 @@ import net.sf.okapi.lib.tmdb.Importer;
 import net.sf.okapi.lib.tmdb.Indexer;
 import net.sf.okapi.lib.tmdb.Splitter;
 import net.sf.okapi.lib.tmdb.SplitterOptions;
+import net.sf.okapi.lib.tmdb.TMOptions;
+import net.sf.okapi.lib.tmdb.TMOptionsList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -823,7 +825,7 @@ class RepositoryPanel extends Composite {
 	 * @param tp the tab of the TM associated with the options to save.
 	 */
 	void updateOptions (TmPanel tp) {
-		options.setItem(tp);
+		options.setItem(tp.getTm().getUUID(), tp.getTmOptions().toString());
 	}
 
 	/**
