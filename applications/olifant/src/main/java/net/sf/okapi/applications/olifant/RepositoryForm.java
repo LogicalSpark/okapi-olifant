@@ -173,6 +173,14 @@ class RepositoryForm {
 		edMongoServerBased.setText(uc.getProperty(MainForm.OPT_REPODATA_MONGOSERVER, ""));
 		edH2ServerBased.setText(uc.getProperty(MainForm.OPT_REPODATA_H2SERVER, ""));
 		
+		// Temporary disable option for distributed version
+		if ( mainForm.fromJar ) {
+			rdMongoServerBased.setEnabled(false);
+			edMongoServerBased.setEnabled(false);
+			rdH2ServerBased.setEnabled(false);
+			edH2ServerBased.setEnabled(false);
+		}
+		
 		// Set the current selection
 		if ( type == null ) type = REPOTYPE_DEFAULTLOCAL;
 		if ( param == null ) param = "";

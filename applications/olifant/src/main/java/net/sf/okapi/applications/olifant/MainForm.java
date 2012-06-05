@@ -85,6 +85,8 @@ public class MainForm {
 	static final String FILEFILTER_TEXT = "TMX and Translation Files\tAll Files (*.*)";
 	static final String FILEFILTER_EXTS = "*.tmx;*.xlf;*.po;*.ttx;*.ts;*.rtf\t*.*";
 
+	// Temporary (For ALPHA/BETA only)
+	public boolean fromJar = false;
 	
 	private Shell shell;
 	private UserConfiguration config;
@@ -144,7 +146,7 @@ public class MainForm {
 	    	File file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
 	    	String appRootFolder = URLDecoder.decode(file.getAbsolutePath(),"utf-8"); //$NON-NLS-1$
 	    	// Remove the JAR file if running an installed version
-	    	boolean fromJar = appRootFolder.endsWith(".jar");
+	    	fromJar = appRootFolder.endsWith(".jar");
 	    	if ( fromJar ) appRootFolder = Util.getDirectoryName(appRootFolder); //$NON-NLS-1$
 			help = new BaseHelp(appRootFolder);
 			

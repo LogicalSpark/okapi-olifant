@@ -37,6 +37,7 @@ import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.VerifyEvent;
@@ -61,8 +62,8 @@ class SegmentEditor {
 	private boolean fullCodesMode;
 	private Pattern codesPattern;
 	private String oriCodesasString;
-	private String oriText;
-	private String lastOkText;
+	private String oriText = "";
+	private String lastOkText = oriText;
 	private TextFragment frag;
 	private TextOptions textOptions;
 	private Color bgColor;
@@ -304,7 +305,7 @@ class SegmentEditor {
 		// Do the display
 		if ( fullCodesMode ) {
 			ensureFragmentExists();
-			edit.setText(cntFmt.FragmentToFullCodesText(frag));
+			edit.setText(cntFmt.fragmentToFullCodesText(frag));
 		}
 		else {
 			edit.setText(lastOkText);
@@ -386,7 +387,7 @@ class SegmentEditor {
 	public void clear () {
 		edit.setText("");
 		oriCodesasString = null;
-		oriText = null;
+		oriText = "";
 		frag = null;
 		modified = false;
 	}
@@ -435,6 +436,27 @@ class SegmentEditor {
 		validateContent();
 		return lastOkText;
 	}
+	
+	private void placeIntoClipboard (int start,
+		int end,
+		boolean delete)
+	{
+		String text = edit.getText(start, end);
+		Clipboard clipboard = new Clipboard(edit.getDisplay());
+		
+//			try {
+//				FragmentDataTransfer dataTrans = FragmentDataTransfer.getInstance();  
+//				TextTransfer textTrans = TextTransfer.getInstance();
+//				// Create the clipboard entry
+//				clipboard.setContents(new Object[]{data, plainText}, new Transfer[]{dataTrans, textTrans});
+//			}
+//			finally {
+//				if ( clipboard != null ) {
+//					clipboard.dispose();
+//				}
+//			}
+		}
+
 
 //	private void placeText (String text) {
 //		Point pt = edit.getSelection();

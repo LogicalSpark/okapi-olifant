@@ -22,10 +22,6 @@ package net.sf.okapi.lib.tmdb;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -40,10 +36,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import net.sf.okapi.common.LocaleId;
 import net.sf.okapi.common.Util;
 import net.sf.okapi.common.filterwriter.GenericContent;
-import net.sf.okapi.common.filterwriter.TMXContent;
 import net.sf.okapi.common.resource.Code;
 import net.sf.okapi.common.resource.TextFragment;
 import net.sf.okapi.common.resource.TextFragment.TagType;
@@ -54,8 +48,9 @@ import net.sf.okapi.common.resource.TextFragment.TagType;
 public class ContentFormat {
 
 	private final GenericContent genCnt = new GenericContent();
-	private final TMXContent tmxCnt = new TMXContent();
 	private final DocumentBuilder docBuilder;
+	private boolean escapeGT = true;
+	private int quoteMode = 1;
 
 	public ContentFormat () {
 		// Initialization
@@ -96,8 +91,127 @@ public class ContentFormat {
 		return tf;
 	}
 
-	public String FragmentToFullCodesText (TextFragment frag) {
-		return tmxCnt.setContent(frag).toString();
+	public String fragmentToFullCodesText (TextFragment frag) {
+		String codedText = frag.getCodedText();
+		List<Code> codes = frag.getCodes();
+		StringBuilder tmp = new StringBuilder();
+		int index;
+		int id;
+		Code code;
+		
+		for ( int i=0; i<codedText.length(); i++ ) {
+			//TODO: output attribute 'type' whenever possible
+			switch ( codedText.codePointAt(i) ) {
+			case TextFragment.MARKER_OPENING:
+				index = TextFragment.toIndex(codedText.charAt(++i));
+				code = codes.get(index);
+				if ( code.hasAnnotation("protected") ) {
+					tmp.append("<hi type=\"protected\">");
+				}
+				if ( code.hasOuterData() ) {
+					tmp.append(code.getOuterData());
+				}
+				else {
+					tmp.append(String.format("<bpt i=\"%d\">", code.getId()));
+					tmp.append(Util.escapeToXML(codes.get(index).toString(), quoteMode, escapeGT, null));
+					tmp.append("</bpt>");
+				}
+				break;
+			case TextFragment.MARKER_CLOSING:
+				index = TextFragment.toIndex(codedText.charAt(++i));
+				code = codes.get(index);
+				if ( code.hasOuterData() ) {
+					tmp.append(code.getOuterData());
+				}
+				else {
+					tmp.append(String.format("<ept i=\"%d\">", code.getId()));
+					tmp.append(Util.escapeToXML(codes.get(index).toString(), quoteMode, escapeGT, null));
+					tmp.append("</ept>");
+				}
+				if ( code.hasAnnotation("protected") ) {
+					tmp.append("</hi>");
+				}
+				break;
+			case TextFragment.MARKER_ISOLATED:
+				index = TextFragment.toIndex(codedText.charAt(++i));
+				code = codes.get(index);
+				id = code.getId();
+				// Use <ph> or <it> depending on underlying tagType
+				switch ( code.getTagType() ) {
+				case PLACEHOLDER:
+					if ( code.hasOuterData() ) {
+						tmp.append(code.getOuterData());
+					}
+					else {
+						tmp.append(String.format("<ph x=\"%d\">", id));
+						tmp.append(Util.escapeToXML(code.toString(), quoteMode, escapeGT, null));
+						tmp.append("</ph>");
+					}
+					break;
+				case OPENING:
+					if ( code.hasOuterData() ) {
+						tmp.append(code.getOuterData());
+					}
+					else {
+						tmp.append(String.format("<it x=\"%d\" pos=\"begin\">", id));
+						tmp.append(Util.escapeToXML(code.toString(), quoteMode, escapeGT, null));
+						tmp.append("</it>");
+					}
+					break;
+				case CLOSING:
+					if ( code.hasOuterData() ) {
+						tmp.append(code.getOuterData());
+					}
+					else {
+						tmp.append(String.format("<it x=\"%d\" pos=\"end\">", id));
+						tmp.append(Util.escapeToXML(code.toString(), quoteMode, escapeGT, null));
+						tmp.append("</it>");
+					}
+					break;
+				}
+				
+				break;
+			case '>':
+				if ( escapeGT ) tmp.append("&gt;");
+				else {
+					if (( i > 0 ) && ( codedText.charAt(i-1) == ']' )) 
+						tmp.append("&gt;");
+					else
+						tmp.append('>');
+				}
+				break;
+			case '<':
+				tmp.append("&lt;");
+				break;
+			case '\r': // Not a line-break in the XML context, but a literal
+				tmp.append("&#13;");
+				break;
+			case '&':
+				tmp.append("&amp;");
+				break;
+			case '"':
+				if ( quoteMode > 0 ) tmp.append("&quot;");
+				else tmp.append('"');
+				break;
+			case '\'':
+				switch ( quoteMode ) {
+				case 1:
+					tmp.append("&apos;");
+					break;
+				case 2:
+					tmp.append("&#39;");
+					break;
+				default:
+					tmp.append(codedText.charAt(i));
+					break;
+				}
+				break;
+			default:
+				tmp.append(codedText.charAt(i));
+				break;
+			}
+		}
+		return tmp.toString();
 	}
 	
 	public TextFragment fullCodesTextToFragment (String text)
@@ -122,13 +236,16 @@ public class ContentFormat {
 				Node attr = map.getNamedItem("type");
 				Element elem = (Element)node;
 				idInfo = getId(idInfo, map.getNamedItem("i"), map.getNamedItem("x"));
+				
 				if ( node.getNodeName().equals("bpt") ) {
-					tf.append(TagType.OPENING, "Xpt",
-						writeElement("bpt", map, node.getNodeValue()), idInfo[0]);
+					code = tf.append(TagType.OPENING, (attr==null ? "Xpt" : attr.getNodeValue()),
+						elem.getTextContent(), idInfo[0]);
+					code.setOuterData(writeElement("bpt", map, elem.getTextContent()));
 				}
 				else if ( node.getNodeName().equals("ept") ) {
-					tf.append(TagType.CLOSING, "Xpt",
-						writeElement("ept", map, node.getNodeValue()), idInfo[0]);
+					code = tf.append(TagType.CLOSING, (attr==null ? "Xpt" : attr.getNodeValue()),
+						elem.getTextContent(), idInfo[0]);
+					code.setOuterData(writeElement("ept", map, elem.getTextContent()));
 				}
 				else if ( node.getNodeName().equals("ph") ) {
 					code = tf.append(TagType.PLACEHOLDER, (attr==null ? "ph" : attr.getNodeValue()),
@@ -138,16 +255,19 @@ public class ContentFormat {
 				else if ( node.getNodeName().equals("it") ) {
 					Node pos = map.getNamedItem("pos");
 					if ( pos == null ) { // Error, but just treat it as a placeholder
-						tf.append(TagType.PLACEHOLDER, (attr==null ? "ph" : attr.getNodeValue()),
-							writeElement("ph", map, node.getNodeValue()), idInfo[0]);
+						code = tf.append(TagType.PLACEHOLDER, (attr==null ? "ph" : attr.getNodeValue()),
+							elem.getTextContent(), idInfo[0]);
+						code.setOuterData(writeElement("ph", map, elem.getTextContent()));
 					}
 					else if ( pos.getNodeValue().equals("begin") ) {
-						tf.append(TagType.OPENING, (attr==null ? "ph" : attr.getNodeValue()),
-							writeElement("bpt", map, node.getNodeValue()), idInfo[0]);
+						code = tf.append(TagType.OPENING, (attr==null ? "it" : attr.getNodeValue()),
+							elem.getTextContent(), idInfo[0]);
+						code.setOuterData(writeElement("it", map, elem.getTextContent()));
 					}
 					else { // Assumes 'end'
-						tf.append(TagType.CLOSING, "Xpt",
-							writeElement("ept", map, node.getNodeValue()), idInfo[0]);
+						code = tf.append(TagType.CLOSING, (attr==null ? "it" : attr.getNodeValue()),
+							elem.getTextContent(), idInfo[0]);
+						code.setOuterData(writeElement("it", map, elem.getTextContent()));
 					}
 				}
 				break;
