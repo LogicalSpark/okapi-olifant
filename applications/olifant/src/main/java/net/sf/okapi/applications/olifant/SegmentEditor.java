@@ -23,6 +23,7 @@ package net.sf.okapi.applications.olifant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.okapi.common.Util;
 import net.sf.okapi.common.filterwriter.GenericContent;
 import net.sf.okapi.common.resource.Code;
 import net.sf.okapi.common.resource.TextFragment;
@@ -38,10 +39,14 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -139,6 +144,37 @@ class SegmentEditor {
 		edit.addVerifyKeyListener(new VerifyKeyListener() {
 			@Override
 			public void verifyKey (VerifyEvent e) {
+				if ( e.stateMask == SWT.CTRL ) {
+					switch ( e.keyCode ) {
+					case 'c':
+						placeIntoClipboard(scanSelection(edit.getSelection()));
+						e.doit = false;
+						return;
+					case 'x':
+						placeIntoClipboard(scanSelection(edit.getSelection()));
+						edit.insert("");
+						e.doit = false;
+						return;
+					case 'v':
+						pasteFromClipboard();
+						e.doit = false;
+						return;
+					}
+				}
+				else if ( e.stateMask == SWT.SHIFT ) {
+					switch ( e.keyCode ) {
+					case SWT.DEL:
+						placeIntoClipboard(scanSelection(edit.getSelection()));
+						edit.insert("");
+						e.doit = false;
+						return;
+					case SWT.INSERT:
+						pasteFromClipboard();
+						e.doit = false;
+						return;
+					}
+				}
+				// Other commands
 				if ( e.keyCode == 13 ) {
 					e.doit = false;
 					if ( !validateContent() ) {
@@ -299,19 +335,24 @@ class SegmentEditor {
 	}
 	
 	private void displayText () {
-		// A display action should not count as a modification
-		// Remember the modify state
-		boolean prevModified = modified;
-		// Do the display
-		if ( fullCodesMode ) {
-			ensureFragmentExists();
-			edit.setText(cntFmt.fragmentToFullCodesText(frag));
-		}
-		else {
-			edit.setText(lastOkText);
-		}
-		// Restore the modify state
-		modified = prevModified;
+//		try {
+			// A display action should not count as a modification
+			// Remember the modify state
+			boolean prevModified = modified;
+			// Do the display
+			if ( fullCodesMode ) {
+				ensureFragmentExists();
+				edit.setText(cntFmt.fragmentToFullCodesText(frag));
+			}
+			else {
+				edit.setText(lastOkText);
+			}
+			// Restore the modify state
+			modified = prevModified;
+//		}
+//		catch ( Throwable e ) {
+//			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+//		}
 	}
 	
 	private boolean saveTextWithFullCodes () {
@@ -437,26 +478,46 @@ class SegmentEditor {
 		return lastOkText;
 	}
 	
-	private void placeIntoClipboard (int start,
-		int end,
-		boolean delete)
-	{
-		String text = edit.getText(start, end);
+	private String scanSelection (Point selection) {
+		if ( selection.x >= selection.y ) return ""; // Nothing selected
+		return edit.getText(selection.x, selection.y-1);
+	}
+	
+	private void placeIntoClipboard (String textData) {
 		Clipboard clipboard = new Clipboard(edit.getDisplay());
-		
-//			try {
-//				FragmentDataTransfer dataTrans = FragmentDataTransfer.getInstance();  
-//				TextTransfer textTrans = TextTransfer.getInstance();
-//				// Create the clipboard entry
-//				clipboard.setContents(new Object[]{data, plainText}, new Transfer[]{dataTrans, textTrans});
-//			}
-//			finally {
-//				if ( clipboard != null ) {
-//					clipboard.dispose();
-//				}
-//			}
+		try {
+			if ( Util.isEmpty(textData) ) return;
+			TextTransfer textTrans = TextTransfer.getInstance();
+			clipboard.setContents(new Object[]{textData}, new Transfer[]{textTrans});
 		}
+		finally {
+			if ( clipboard != null ) {
+				clipboard.dispose();
+			}
+		}
+	}
 
+	private void pasteFromClipboard () {
+		Clipboard clipboard = new Clipboard(edit.getDisplay());
+		try {
+			TransferData[] transferDatas = clipboard.getAvailableTypes();
+			for ( TransferData transData : transferDatas ) {
+				if ( TextTransfer.getInstance().isSupportedType(transData) ) {
+					String text = (String)clipboard.getContents(TextTransfer.getInstance());
+					int pos = edit.getCaretOffset();
+					edit.insert(text);
+					edit.setCaretOffset(pos+text.length());
+					break;
+				}
+			}
+		}
+		finally {
+			if ( clipboard != null ) {
+				clipboard.dispose();
+			}
+		}
+	}
+	
 
 //	private void placeText (String text) {
 //		Point pt = edit.getSelection();
