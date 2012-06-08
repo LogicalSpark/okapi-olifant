@@ -84,7 +84,7 @@ class QueryTMForm implements ISegmentEditorUser {
 		gdTmp.horizontalSpan = 8;
 		gdTmp.widthHint = 550;
 		gdTmp.heightHint = 70;
-		seQuery = new SegmentEditor(shell, -1, this, gdTmp);
+		seQuery = new SegmentEditor(shell, -1, this, gdTmp, false, true);
 		
 		btQuery = UIUtil.createGridButton(shell, SWT.PUSH, "Search", UIUtil.BUTTON_DEFAULT_WIDTH, 1);
 		btQuery.setText("Search");
@@ -142,8 +142,7 @@ class QueryTMForm implements ISegmentEditorUser {
 		gdTmp = new GridData(GridData.FILL_BOTH);
 		gdTmp.horizontalSpan = 8;
 		gdTmp.heightHint = 70;
-		seMatch = new SegmentEditor(shell, -1, this, gdTmp);
-		seMatch.setEditable(false);
+		seMatch = new SegmentEditor(shell, -1, this, gdTmp, true, true);
 		
 		// Creates the table
 		table = new Table(shell, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.V_SCROLL);
@@ -214,7 +213,7 @@ class QueryTMForm implements ISegmentEditorUser {
 		}
 		else {
 			TableItem ti = table.getItem(n);
-			seMatch.setText(ti.getText(2), null, -1);
+			seMatch.setText(ti.getText(2), (String)ti.getData(), -1);
 			stCount.setText(String.format("Match %d of %d  ", n+1, table.getItemCount()));
 		}
 	}
@@ -268,6 +267,7 @@ class QueryTMForm implements ISegmentEditorUser {
 				ti.setText(hit.getSegKey());
 				ti.setText(1, String.format("%f", hit.getScore()));
 				ti.setText(2, hit.getVariant().getGenericTextField().stringValue());
+				ti.setData(hit.getVariant().getCodesField().stringValue());
 			}
 			// Select the first match as the current one
 			table.select(0);

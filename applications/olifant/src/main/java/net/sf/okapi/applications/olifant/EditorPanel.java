@@ -40,9 +40,11 @@ class EditorPanel extends SashForm {
 		setLayout(new GridLayout(1, false));
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		edSource = new SegmentEditor(this, -1, caller);
-		edTarget = new SegmentEditor(this, -1, caller);
+		edSource = new SegmentEditor(this, -1, caller, null, false, false);
+		edTarget = new SegmentEditor(this, -1, caller, null, false, false);
 		extraPanel = new ExtraFieldPanel(this, 0, caller);
+		edSource.setOther(edTarget);
+		edTarget.setOther(edSource);
 		
 		setWeights(new int[]{1, 1, 0});
 		setSashWidth(0);

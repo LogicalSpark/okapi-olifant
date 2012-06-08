@@ -119,7 +119,7 @@ public class Main {
 		ps.println("-------------------------------------------------------------------------------"); //$NON-NLS-1$
 		ps.println("Okapi Jumbo - Olifant Console");
 		// The version will show as 'null' until the code is build as a JAR.
-		ps.println(String.format("Version: %s", getClass().getPackage().getImplementationVersion()));
+		ps.println(String.format("Version: %s (ALPHA)", getClass().getPackage().getImplementationVersion()));
 		ps.println("-------------------------------------------------------------------------------"); //$NON-NLS-1$
 	}
 

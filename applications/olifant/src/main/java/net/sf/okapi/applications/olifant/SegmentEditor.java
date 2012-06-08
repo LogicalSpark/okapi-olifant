@@ -20,6 +20,7 @@
 
 package net.sf.okapi.applications.olifant;
 
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,23 +45,39 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
 class SegmentEditor {
 
-	private static final Pattern SHORTCODES = Pattern.compile("\\<[/be]?(\\d+?)/?\\>");
-	private static final Pattern REALCODES = Pattern.compile("<(bpt|ept|ph|it|ut).*?>(.*?)</\\1>");
+	private static final Pattern SHORTCODES = Pattern.compile("<[/be]?(\\d+?)/?>");
+	private static final Pattern REALCODES = Pattern.compile("(<(bpt|ept|ph|it|ut).*?>(.*?)</\\2>)|(<(bpt|ept|ph|it|ut)[^>]*?/>)");
+	
+	private static final int MAX_UNDO = 50;
 
 	private final ISegmentEditorUser caller;
 	private final TextStyle codeStyle;
 	private final ContentFormat cntFmt;
 	private final GenericContent genCnt;
-
+	private final boolean alwaysReadOnly;
+	private final boolean alwaysShortCodes;
+	
+	private Stack<TextChange> undoStack;
+	private Stack<TextChange> redoStack;
+	private boolean ignoreUndo;
+	private boolean storeRedo;
+	
+	private SegmentEditor other;
 	private int column = -1;
 	private StyledText edit;
 	private boolean modified;
@@ -73,18 +90,34 @@ class SegmentEditor {
 	private TextOptions textOptions;
 	private Color bgColor;
 
-	public SegmentEditor (Composite parent,
-		int flags,
-		ISegmentEditorUser p_caller)
-	{
-		this(parent, flags, p_caller, null);
+	class TextChange {
+		  // The starting offset of the change
+		  int start;
+		  // The length of the change
+		  int length;
+		  // The replaced text
+		  String replacedText;
+
+		  TextChange (int start,
+			int length,
+			String replacedText)
+		{
+		    this.start = start;
+		    this.length = length;
+		    this.replacedText = replacedText;
+		}
 	}
 	
 	public SegmentEditor (Composite parent,
 		int flags,
 		ISegmentEditorUser p_caller,
-		GridData gridData)
+		GridData gridData,
+		boolean alwaysReadOnly,
+		boolean alwaysShortCodes)
 	{
+		this.alwaysReadOnly = alwaysReadOnly;
+		this.alwaysShortCodes = alwaysShortCodes;
+		
 		if ( flags < 0 ) { // Use the default styles if requested
 			flags = SWT.WRAP | SWT.V_SCROLL | SWT.BORDER;
 		}
@@ -103,6 +136,7 @@ class SegmentEditor {
 			gridData = new GridData(GridData.FILL_BOTH);
 		}
 		edit.setLayoutData(gridData);
+		if ( alwaysReadOnly ) setEditable(false);
 		
 		edit.setMargins(2, 2, 2, 2);
 
@@ -118,12 +152,28 @@ class SegmentEditor {
 		textOptions = new TextOptions(parent.getDisplay(), edit, 3);
 		textOptions.applyTo(edit);
 		
+		undoStack = new Stack<TextChange>();
+		redoStack = new Stack<TextChange>();
+		
 		fullCodesMode = false;
 		codesPattern = SHORTCODES;
 		
 		edit.addExtendedModifyListener(new ExtendedModifyListener() {
 			@Override
 			public void modifyText (ExtendedModifyEvent event) {
+				// Keep track of the changes for the undo function
+				if ( ignoreUndo ) {
+					if ( storeRedo ) {
+						redoStack.push(new TextChange(event.start, event.length, event.replacedText));
+					}
+				}
+				else {
+					undoStack.push(new TextChange(event.start, event.length, event.replacedText));
+					if ( undoStack.size() > MAX_UNDO ) undoStack.remove(0);
+					if ( !redoStack.isEmpty() ) redoStack.clear();
+				}
+				
+		        // Color-code the inline codes
 				String text = edit.getText();
 				java.util.List<StyleRange> ranges = new java.util.ArrayList<StyleRange>();
 				Matcher m = codesPattern.matcher(text);
@@ -159,6 +209,14 @@ class SegmentEditor {
 						pasteFromClipboard();
 						e.doit = false;
 						return;
+					case 'z':
+						undo();
+						e.doit = false;
+						return;
+					case 'y':
+						redo();
+						e.doit = false;
+						return;
 					}
 				}
 				else if ( e.stateMask == SWT.SHIFT ) {
@@ -171,6 +229,16 @@ class SegmentEditor {
 					case SWT.INSERT:
 						pasteFromClipboard();
 						e.doit = false;
+						return;
+					}
+				}
+				else if ( e.stateMask == SWT.ALT ) {
+					switch ( e.keyCode ) {
+					case SWT.ARROW_RIGHT:
+						selectNextCode(edit.getCaretOffset(), true);
+						return;
+					case SWT.ARROW_LEFT:
+						selectPreviousCode(edit.getCaretOffset(), true);
 						return;
 					}
 				}
@@ -201,78 +269,62 @@ class SegmentEditor {
 			}
 		});
 		
-//		edit.addVerifyKeyListener (new VerifyKeyListener() {
-//			@Override
-//			public void verifyKey(VerifyEvent e) {
-//				if ( e.stateMask == SWT.CTRL ) {
-//					switch ( e.keyCode ) {
-//					}
-//				}
-//			}
-//		});
-
-//		edit.addVerifyKeyListener(new VerifyKeyListener() {
-//		@Override
-//		public void verifyKey(VerifyEvent e) {
-//			if ( e.stateMask == SWT.ALT ) {
-//				switch ( e.keyCode ) {
-//				case SWT.ARROW_RIGHT:
-//					selectNextCode(edit.getCaretOffset(), true);
-//					e.doit = false;
-//					break;
-//				case SWT.ARROW_LEFT:
-//					selectPreviousCode(edit.getCaretOffset(), true);
-//					e.doit = false;
-//					break;
-////				case SWT.ARROW_DOWN: // Target-mode command
-////					setNextSourceCode();
-////					e.doit = false;
-////					break;
-////				case SWT.ARROW_UP: // Target-mode command
-////					setPreviousSourceCode();
-////					e.doit = false;
-////					break;
-//				}
-//			}
-//			else if ( e.stateMask == SWT.CTRL ) {
-//				switch ( e.keyCode ) {
-////				case 'd':
-////					cycleDisplayMode();
-////					e.doit = false;
-////					break;
-////				case 'c':
-////					copyToClipboard(edit.getSelection());
-////					e.doit = false;
-////					break;
-////				case 'v':
-////					pasteFromClipboard();
-////					e.doit = false;
-////					break;
-//				case ' ':
-//					placeText("\u00a0");
-//					e.doit = false;
-//					break;
-//				}
-//			}
-////			else if ( e.stateMask == SWT.SHIFT ) {
-////				switch ( e.keyCode ) {
-////				case SWT.DEL:
-////					cutToClipboard(edit.getSelection());
-////					e.doit = false;
-////					break;
-////				case SWT.INSERT:
-////					pasteFromClipboard();
-////					e.doit = false;
-////					break;
-////				}
-////			}
-//			else if ( e.keyCode == SWT.DEL ){
-//				int i = 0;
-//			}
-//		}
-//	});
-		
+		edit.setMenu(createContextMenu());
 	}
+	
+	/**
+	 * Sets the other segment editor.
+	 * @param other the other segment editor.
+	 */
+	public void setOther (SegmentEditor other) {
+		this.other = other;
+	}
+	
+	private Menu createContextMenu () {
+		final Menu contextMenu = new Menu(edit.getShell(), SWT.POP_UP);
+
+		MenuItem item = new MenuItem(contextMenu, SWT.CHECK);
+		item.setText("Full Code Display Mode");
+		item.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				setFullCodesMode(!getFullCodesMode());
+				if ( other != null ) other.setFullCodesMode(getFullCodesMode());
+            }
+		});
+		
+		new MenuItem(contextMenu, SWT.SEPARATOR);
+		
+		item = new MenuItem(contextMenu, SWT.PUSH);
+		item.setText("Remove All Codes");
+		item.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				clearCodes();
+            }
+		});
+
+		new MenuItem(contextMenu, SWT.SEPARATOR);
+			
+		item = new MenuItem(contextMenu, SWT.CHECK);
+		item.setText("Read-Only Mode");
+		item.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				setEditable(!getEditable());
+			}
+		});
+		
+		contextMenu.addListener (SWT.Show, new Listener () {
+			public void handleEvent (Event event) {
+				contextMenu.getItems()[0].setEnabled(!alwaysShortCodes);
+				contextMenu.getItems()[0].setSelection(getFullCodesMode());
+
+				contextMenu.getItems()[4].setEnabled(!alwaysReadOnly);
+				contextMenu.getItems()[4].setSelection(!getEditable());
+			}
+		});
+		
+		return contextMenu;
+	}
+	
 	
 	@Override
 	protected void finalize () {
@@ -292,6 +344,7 @@ class SegmentEditor {
 	}
 	
 	public void setFullCodesMode (boolean fullCodesMode) {
+		if ( alwaysShortCodes ) return; // Ignore this if we are in Short Codes Only mode
 		// Save and validate text in current mode
 		if ( !validateContent() ) return; // Do not change if there is an error
 
@@ -304,7 +357,6 @@ class SegmentEditor {
 			codesPattern = SHORTCODES;
 		}
 		displayText();
-		//edit.append(""); // Make a modification to trigger the re-parsing
 	}
 
 	private boolean validateContent () {
@@ -335,10 +387,11 @@ class SegmentEditor {
 	}
 	
 	private void displayText () {
-//		try {
+		try {
 			// A display action should not count as a modification
-			// Remember the modify state
+			// Remember the modify state and set the ignore flag
 			boolean prevModified = modified;
+			ignoreUndo = true;
 			// Do the display
 			if ( fullCodesMode ) {
 				ensureFragmentExists();
@@ -347,12 +400,13 @@ class SegmentEditor {
 			else {
 				edit.setText(lastOkText);
 			}
-			// Restore the modify state
+			// Restore the modify state and ignore flag
 			modified = prevModified;
-//		}
-//		catch ( Throwable e ) {
-//			Dialogs.showError(edit.getShell(), e.getMessage(), null);
-//		}
+			ignoreUndo = false;
+		}
+		catch ( Throwable e ) {
+			Dialogs.showError(edit.getShell(), e.getMessage(), null);
+		}
 	}
 	
 	private boolean saveTextWithFullCodes () {
@@ -422,7 +476,12 @@ class SegmentEditor {
 	}
 	
 	public void setEditable (boolean editable) {
+		if ( alwaysReadOnly ) return; // Ignore this if we are in Always Read-Only mode
 		edit.setEditable(editable);
+	}
+	
+	public boolean getEditable () {
+		return edit.getEditable();
 	}
 
 	public void clear () {
@@ -431,6 +490,8 @@ class SegmentEditor {
 		oriText = "";
 		frag = null;
 		modified = false;
+		undoStack.clear();
+		redoStack.clear();
 	}
 	
 	public boolean isModified () {
@@ -460,6 +521,8 @@ class SegmentEditor {
 		lastOkText = oriText;
 		modified = false;
 		frag = null;
+		undoStack.clear();
+		redoStack.clear();
 		displayText();
 	}
 
@@ -517,7 +580,106 @@ class SegmentEditor {
 			}
 		}
 	}
+
+	private void clearCodes () {
+		int[] ranges = edit.getRanges();
+		if ( ranges.length == 0 ) return;
+		StringBuilder tmp = new StringBuilder(edit.getText());
+		int offset = 0;
+		for ( int i=0; i<ranges.length; i+=2 ) {
+			int start = ranges[i]-offset;
+			tmp.delete(start, start+ranges[i+1]);
+			offset += ranges[i+1];
+		}
+		frag = new TextFragment(tmp.toString());
+		lastOkText = tmp.toString();
+		edit.setText(lastOkText);
+	}
+		
+
+	private void selectNextCode (int position,
+		boolean cycle)
+	{
+		int[] ranges = edit.getRanges();
+		if ( ranges.length == 0 ) return;
+		while ( true ) {
+			for ( int i=0; i<ranges.length; i+=2 ) {
+				int value = ranges[i];
+				if ( position <= value ) {
+					edit.setSelection(value, value+ranges[i+1]);
+					return;
+				}
+			}
+			// Not found yet: Stop here if we don't cycle to the first
+			if ( !cycle ) return;
+			position = 0; // Otherwise: re-start from front
+		}
+	}
+		
+	private void selectPreviousCode (int position,
+		boolean cycle)
+	{
+		int[] ranges = edit.getRanges();
+		if ( ranges.length == 0 ) return;
+		while ( true ) {
+			for ( int i=ranges.length-2; i>=0; i-=2 ) {
+				int value = ranges[i];
+				int len = ranges[i+1];
+				if ( value < position ) {
+					Point pt = edit.getSelection();
+					if (( pt.x == value ) && ( pt.x != pt.y )) {
+						if ( ranges.length < 3 ) return;
+						else continue;
+					}
+					edit.setSelection(value, value+len);
+					return;
+				}
+			}
+			// Not found yet: Stop here if we don't cycle to the first
+			if ( !cycle ) return;
+			position = edit.getCharCount()-1; // Otherwise: re-start from the end
+		}			
+	}
+
+	private void undo () {
+		// Make sure the stack isn't empty
+		if ( undoStack.isEmpty() ) return;
+		// Get the last change
+		TextChange change = undoStack.pop();
+		// Set the ignore flag. Otherwise, the replaceTextRange call will get placed on the undo stack
+		// Set also the storeRedo flag to be able to re-do the undo changes.
+		ignoreUndo = storeRedo = true;
+		// Replace the changed text
+		edit.replaceTextRange(change.start, change.length, change.replacedText);
+		// Move the caret
+		edit.setCaretOffset(change.start);
+		// Scroll the screen
+		edit.setTopIndex(edit.getLineAtOffset(change.start));
+		// Reset the flags
+		ignoreUndo = storeRedo = false;
+	}
+
+	private void redo () {
+		// Make sure the stack isn't empty
+		if ( redoStack.isEmpty() ) return;
+		// Get the last change
+		TextChange change = redoStack.pop();
+		// Set the ignore flag. Otherwise, the replaceTextRange call will get placed on the undo stack
+		ignoreUndo = true;
+		// Replace the changed text
+		edit.replaceTextRange(change.start, change.length, change.replacedText);
+		// Move the caret
+		int pos = change.start+change.replacedText.length();
+		edit.setCaretOffset(pos);
+		// Scroll the screen
+		edit.setTopIndex(edit.getLineAtOffset(pos));
+		// Reset the ignore flag
+		ignoreUndo = false;
+	}
 	
+//	private void moveCaretToEnd () {
+//		edit.setCaretOffset(edit.getText().length());
+//	}
 
 //	private void placeText (String text) {
 //		Point pt = edit.getSelection();

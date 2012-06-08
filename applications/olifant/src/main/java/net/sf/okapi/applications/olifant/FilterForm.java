@@ -52,7 +52,7 @@ class FilterForm {
 		this.options = options;
 		this.availableFields = availableFields;
 		shell = new Shell(parent, SWT.CLOSE | SWT.TITLE | SWT.RESIZE | SWT.APPLICATION_MODAL);
-		shell.setText("Create New TM");
+		shell.setText("Filter settings");
 		UIUtil.inheritIcon(shell, parent);
 		shell.setLayout(new GridLayout(1, false));
 
