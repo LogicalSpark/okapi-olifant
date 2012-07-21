@@ -17,16 +17,24 @@
 		<!-- Version of the Olifant project -->
 		<okapiOlifantVersion>4.0.17-SNAPSHOT</okapiOlifantVersion>
 		<!-- Version of the Okapi main libraries to use with Olifant -->
-		<okapiLibVersion>0.17-SNAPSHOT</okapiLibVersion>
+		<okapiLibVersion>0.18-SNAPSHOT</okapiLibVersion>
 		<!-- Encoding to use -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<repositories>
 		<repository>
-			<id>cloudbees-okapi</id>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+        		<enabled>true</enabled>
+        		<updatePolicy>always</updatePolicy>
+        		<checksumPolicy>warn</checksumPolicy>
+      		</snapshots>
+      		<id>cloudbees-okapi</id>
 			<name>okapi-repository-on-CloudBees</name>
-			<url>http://repository-okapi.forge.cloudbees.com/snapshot/</url>			
+			<url>http://repository-okapi.forge.cloudbees.com/snapshot</url>			
 			<layout>default</layout>
 		</repository>
 		<repository>

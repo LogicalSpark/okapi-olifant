@@ -464,6 +464,11 @@ class SegmentEditor {
 		return edit.setFocus();
 	}
 	
+	/**
+	 * Sets the selected text for this segment.
+	 * @param start the start position (0 for the beginning of the text)
+	 * @param end the end position (use -1 for the end)
+	 */
 	public void setSelection (int start,
 		int end)
 	{
@@ -595,7 +600,6 @@ class SegmentEditor {
 		lastOkText = tmp.toString();
 		edit.setText(lastOkText);
 	}
-		
 
 	private void selectNextCode (int position,
 		boolean cycle)
@@ -687,44 +691,5 @@ class SegmentEditor {
 //		edit.setCaretOffset(pt.x+text.length());
 //	}
 //	
-//	private void selectNextCode (int position,
-//		boolean cycle)
-//	{
-//		StyleRange[] ranges = edit.getStyleRanges();
-//		if ( ranges.length == 0 ) return;
-//		while ( true ) {
-//			for ( StyleRange range : ranges ) {
-//				if ( position <= range.start ) {
-//					edit.setSelection(range.start, range.start+range.length);
-//					return;
-//				}
-//			}
-//			// Not found yet: Stop here if we don't cycle to the first
-//			if ( !cycle ) return;
-//			position = 0; // Otherwise: re-start from front
-//		}
-//	}
-	
-//	private void selectPreviousCode (int position,
-//		boolean cycle)
-//	{
-//		StyleRange[] ranges = edit.getStyleRanges();
-//		if ( ranges.length == 0 ) return;
-//		StyleRange sr;
-//		while ( true ) {
-//			for ( int i=ranges.length-1; i>=0; i-- ) {
-//				sr = ranges[i];
-//				if ( position >= sr.start+sr.length ) {
-//					Point pt = edit.getSelection();
-//					if (( pt.x == sr.start ) && ( pt.x != pt.y )) continue;
-//					edit.setSelection(sr.start, sr.start+sr.length);
-//					return;
-//				}
-//			}
-//			// Not found yet: Stop here if we don't cycle to the first
-//			if ( !cycle ) return;
-//			position = edit.getCharCount()-1; // Otherwise: re-start from the end
-//		}
-//	}
 
 }

@@ -1178,10 +1178,10 @@ class TmPanel extends Composite implements IObserver, ISegmentEditorUser {
 	private void editCurrentCell () {
 		int n = cursor.getColumn();
 		if ( n == srcCol ) {
-			editPanel.setFocus(0, 0, -1);
+			editPanel.setFocus(0, 0, 0);
 		}
 		else if ( n == trgCol ) {
-			editPanel.setFocus(1, 0, -1);
+			editPanel.setFocus(1, 0, 0);
 		}
 		//TODO: other columns go to extra
 	}

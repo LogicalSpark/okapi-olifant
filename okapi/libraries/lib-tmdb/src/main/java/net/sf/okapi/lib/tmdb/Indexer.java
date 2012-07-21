@@ -86,7 +86,7 @@ public class Indexer implements Runnable {
 					for ( String fn : fields ) {
 						if ( fn.startsWith(DbUtil.TEXT_PREFIX) ) {
 							String loc = DbUtil.getFieldLocale(fn);
-							entry.addVariant(new Variant(loc, rs.getString(fn), null)); //TODO: get the codesasString too!!
+							entry.addVariant(new Variant(loc, rs.getString(fn), rs.getString(DbUtil.CODES_PREFIX+loc)));
 						}
 						else {
 							entry.setAttribute(fn, rs.getString(fn));
