@@ -17,7 +17,7 @@
 		<!-- Version of the Olifant project -->
 		<okapiOlifantVersion>4.0.17-SNAPSHOT</okapiOlifantVersion>
 		<!-- Version of the Okapi main libraries to use with Olifant -->
-		<okapiLibVersion>0.18-SNAPSHOT</okapiLibVersion>
+		<okapiLibVersion>0.19-SNAPSHOT</okapiLibVersion>
 		<!-- Encoding to use -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
