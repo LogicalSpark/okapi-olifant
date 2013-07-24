@@ -5,78 +5,78 @@
 	<condition property="platform" value="win32-x86">
 		<os family="windows"/>
 	</condition>
-	<condition property="swtLocalName" value="x86-3.7.jar">
+	<condition property="swtLocalName" value="x86-4.2.jar">
 		<os family="windows"/>
 	</condition>
 
 	<condition property="platform" value="win32-x86_64">
 		<os family="windows" arch="x86_64"/>
 	</condition>
-	<condition property="swtLocalName" value="x86_64-3.7.jar">
+	<condition property="swtLocalName" value="x86_64-4.2.jar">
 		<os family="windows" arch="x86_64"/>
 	</condition>
 
 	<condition property="platform" value="cocoa-macosx">
 		<os family="mac"/>
 	</condition>
-	<condition property="swtLocalName" value="macosx-3.7.jar">
+	<condition property="swtLocalName" value="macosx-4.2.jar">
 		<os family="mac"/>
 	</condition>
 
 	<condition property="platform" value="gtk2-linux-x86">
 		<os name="Linux" arch="x86"/>
 	</condition>
-	<condition property="swtLocalName" value="x86-3.7.jar">
+	<condition property="swtLocalName" value="x86-4.2.jar">
 		<os name="Linux" arch="x86"/>
 	</condition>
 	
 	<condition property="platform" value="gtk2-linux-x86_64">
 		<os name="Linux" arch="x86_64"/>
 	</condition>
-	<condition property="swtLocalName" value="x86_64-3.7.jar">
+	<condition property="swtLocalName" value="x86_64-4.2.jar">
 		<os name="Linux" arch="x86_64"/>
 	</condition>
 
 	<!-- Set the swtdep and swtdepName variables -->
-	<condition property="swtdep" value="win32/win32/x86/3.7">
+	<condition property="swtdep" value="win32/win32/x86/4.2">
 		<equals arg1="${platform}" arg2="win32-x86"/>
 	</condition>
-	<condition property="swtdepName" value="x86-3.7.jar">
+	<condition property="swtdepName" value="x86-4.2.jar">
 		<equals arg1="${platform}" arg2="win32-x86"/>
 	</condition>
 	
-	<condition property="swtdep" value="win32/win32/x86_64/3.7">
+	<condition property="swtdep" value="win32/win32/x86_64/4.2">
 		<equals arg1="${platform}" arg2="win32-x86_64"/>
 	</condition>
-	<condition property="swtdepName" value="x86_64-3.7.jar">
+	<condition property="swtdepName" value="x86_64-4.2.jar">
 		<equals arg1="${platform}" arg2="win32-x86_64"/>
 	</condition>
 	
-	<condition property="swtdep" value="cocoa/macosx/3.7">
+	<condition property="swtdep" value="cocoa/macosx/4.2">
 		<equals arg1="${platform}" arg2="cocoa-macosx"/>
 	</condition>
-	<condition property="swtdepName" value="macosx-3.7.jar">
+	<condition property="swtdepName" value="macosx-4.2.jar">
 		<equals arg1="${platform}" arg2="cocoa-macosx"/>
 	</condition>
 	
-	<condition property="swtdep" value="cocoa/macosx-x86_64/3.7">
+	<condition property="swtdep" value="cocoa/macosx-x86_64/4.2">
 		<equals arg1="${platform}" arg2="cocoa-macosx-x86_64"/>
 	</condition>
-	<condition property="swtdepName" value="macosx-x86_64-3.7.jar">
+	<condition property="swtdepName" value="macosx-x86_64-4.2.jar">
 		<equals arg1="${platform}" arg2="cocoa-macosx-x86_64"/>
 	</condition>
 	
-	<condition property="swtdep" value="gtk2/linux/x86/3.7">
+	<condition property="swtdep" value="gtk2/linux/x86/4.2">
 		<equals arg1="${platform}" arg2="gtk2-linux-x86"/>
 	</condition>
-	<condition property="swtdepName" value="x86-3.7.jar">
+	<condition property="swtdepName" value="x86-4.2.jar">
 		<equals arg1="${platform}" arg2="gtk2-linux-x86"/>
 	</condition>
 	
-	<condition property="swtdep" value="gtk2/linux/x86_64/3.7">
+	<condition property="swtdep" value="gtk2/linux/x86_64/4.2">
 		<equals arg1="${platform}" arg2="gtk2-linux-x86_64"/>
 	</condition>
-	<condition property="swtdepName" value="x86_64-3.7.jar">
+	<condition property="swtdepName" value="x86_64-4.2.jar">
 		<equals arg1="${platform}" arg2="gtk2-linux-x86_64"/>
 	</condition>
 
